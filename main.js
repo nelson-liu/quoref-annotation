@@ -6,7 +6,7 @@ fetch_passages_with_retries(3)
 var current_question_id = ""
 var edit_mode = false
 var annotations = {}
-var min_questions = 4
+var min_questions = 20
 var num_passages = 5
 var global_timeout = null
 var passage_ids = []
