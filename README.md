@@ -1,3 +1,3 @@
 Quoref annotation tool
 
-Relevant parts taken from [https://github.com/dDua/mturk-drop](Dheeru Dua's code for DROP) and modified as appropriate.
+Relevant parts taken from [Dheeru Dua's code for DROP](https://github.com/dDua/mturk-drop) and modified as appropriate.
