@@ -983,10 +983,9 @@ function getPassageSelectionIndices() {
         var selectionStartIndex = start_idx + startIndexInNode;
         var selectionEndIndex = selectionStartIndex + selectedText.length;
         if (selectionStartIndex != selectionEndIndex) {
-            console.log(selectedText);
-            console.log("start index: " + selectionStartIndex);
-            console.log("end index: " + selectionEndIndex);
-            document.getElementById('span-0').value = selectedText;
+            console.log("Selected text: " + selectedText);
+            console.log("Start index: " + selectionStartIndex);
+            console.log("End index: " + selectionEndIndex);
         }
     }
 }
