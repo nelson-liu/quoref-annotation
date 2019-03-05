@@ -17,7 +17,6 @@ document.onkeydown = function (event) {
     if (event.target.tagName != 'TEXTAREA' && event.keyCode == 13) {
             create_question()
             return false;
-        
     }
 }
 
@@ -93,7 +92,7 @@ function get_elements_by_class_starts_with(container, selector_tag, prefix) {
 // Attach AI-answer fetch to the quest text keyup event
 function initialize_answer() {
     document.getElementById('ai-answer').value = 'AI is thinking ...';
-   
+
     if (global_timeout != null) {
         clearTimeout(global_timeout);
     }
@@ -351,7 +350,7 @@ function run_validations_no_answer() {
     }
 }
 
-// Run span checks on hover 
+// Run span checks on hover
 function run_validations_span() {
     var result = create_text_for_tab()
     var qa_text = result.qa_text
@@ -378,7 +377,7 @@ function run_validations_span() {
         if (document.getElementById("span").checked) {
             document.getElementById("next_question").title = "Please check the length of each span. Try creating a more specific question."
             document.getElementById("error_panel").innerText = "Please check the length of each span. Try creating a more specific question."
-        }    
+        }
     } else if (empty_qa) {
         disable_button("next_question")
         document.getElementById("next_question").title = "Empty question or answer or span"
@@ -433,7 +432,7 @@ function span_match_check() {
         var ans_table = document.getElementById("ans_table");
 
         var visible_spans = get_spans(true)
-        var count = 0        
+        var count = 0
         while (count < visible_spans.length) {
             var span_id = "span-" + count
             if (document.getElementById(span_id)) {
@@ -459,7 +458,7 @@ function span_match_check() {
                         var marker = cur_span_row.cells[1]
                         marker.innerHTML = '<p style="color: red;">&#10008;</p>'
                     }
-                    correct_flag = correct_flag && false                   
+                    correct_flag = correct_flag && false
                 } else if (span_value.trim().split(" ").length > 5) {
                     if (cur_span_row.cells.length == 2) {
                         var marker = cur_span_row.insertCell(1)
@@ -635,7 +634,8 @@ function populate_passage(config) {
         new_passage.innerText = passages[record_count - 1];
         new_passage.className = "passage-" + record_count;
         new_passage.style.fontSize = '15px'
-
+        new_passage.setAttribute("id", "passage-display");
+        new_passage.setAttribute("onmouseup", "getPassageSelectionIndices()");
         parent.appendChild(new_passage)
 
         var i = 0
@@ -741,7 +741,6 @@ function fetch_passages_with_retries(n) {
                 .then(parse_passages)
                 .catch(error_passages);
         })
-    
 }
 
 // Get all the current spans
@@ -766,7 +765,7 @@ function delete_span(el) {
     var curr_span_id = el.parentNode.parentNode.firstChild.firstChild.id
     var start_span_id = parseInt(curr_span_id.replace("span-", ""))
     var visible_spans = get_spans(true)
-    //var last_span_id = parseInt(visible_spans[visible_spans.length - 1].id.replace("span-", ""))    
+    //var last_span_id = parseInt(visible_spans[visible_spans.length - 1].id.replace("span-", ""))
     var last_span_id = get_spans(false).length
     for (var i = start_span_id + 1; i < last_span_id; i++) {
         var curr_span = document.getElementById("span-" + i)
@@ -807,7 +806,7 @@ function add_span(el) {
         var span_count = span_index - span_row_start_index
         var new_row = ans_table.insertRow(span_index + 1)
         var new_cell = new_row.insertCell(0)
-        new_cell.innerHTML = '<input type="text" placeholder="copy text from passage here" id="span-' + span_count + '" name="span-' + span_count + '">';
+        new_cell.innerHTML = '<input type="text" placeholder="highlight the answer in the passage" id="span-' + span_count + '" name="span-' + span_count + '">';
         var new_ref = new_row.insertCell(1)
         new_ref.innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>'
         document.getElementById("span-" + span_count).onkeyup = run_validations_span
@@ -819,7 +818,7 @@ function add_span(el) {
     } else {
         document.getElementById("span-" + span_count).parentNode.parentNode.style.display = ""
         document.getElementById("span-" + span_count).parentNode.nextSibling.innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>'
-        if (span_count >= 1) {            
+        if (span_count >= 1) {
             el.outerHTML = ' <a href="delete_span" onclick="return delete_span(this);">&#9473;</a>'
         }
     }
@@ -937,5 +936,57 @@ function parse_passages(response) {
         }
         populate_passage('next')
     });
+}
 
+function getSelectedText() {
+    var sel, text = "";
+    if (window.getSelection) {
+        text = "" + window.getSelection();
+    } else if ( (sel = document.selection) && sel.type == "Text") {
+        text = sel.createRange().text;
+    }
+    return text;
+}
+
+function getPassageSelectionIndices() {
+    if (window.getSelection) {
+        var sel = window.getSelection();
+        var div = document.getElementById("passage-display");
+        var selectedText = getSelectedText();
+        var start_idx = 0;
+
+        // Iterate through the nodes in div
+        var divChildNodes = div.childNodes;
+        for (var i = 0; i < divChildNodes.length; i++) {
+            childNode = divChildNodes[i];
+            // If it's a linebreak node, increment the start index.
+            if (childNode.nodeName == "BR") {
+                start_idx += 1;
+            }
+            if (childNode.nodeName == "#text") {
+                // check if this text node is part of the selection
+                var childNodeInSelection = sel.containsNode(childNode, true);
+                if (childNodeInSelection) {
+                    // Get the start index selection
+                    if (sel.rangeCount) {
+                        var range = sel.getRangeAt(0);
+                        var startIndexInNode = range.startOffset;
+                        break;
+                    }
+                }
+                else {
+                    var childNodeTextLength = childNode.textContent.length;
+                    start_idx += childNodeTextLength;
+                }
+            }
+        }
+        var selectionStartIndex = start_idx + startIndexInNode;
+        var selectionEndIndex = selectionStartIndex + selectedText.length;
+        if (selectionStartIndex != selectionEndIndex) {
+            console.log(selectedText);
+            console.log("start index: " + selectionStartIndex);
+            console.log("end index: " + selectionEndIndex);
+            document.getElementById('span-0').value = selectedText;
+        }
+    }
 }
