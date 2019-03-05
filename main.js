@@ -1,4 +1,4 @@
-﻿var record_count = 0;
+var record_count = 0;
 var total_question_cnt = 0;
 var question_num = 0
 var passages = []
