@@ -167,9 +167,9 @@ function modify_previous_question() {
             span_elements[i].value = annotation.answer.spans[i];
             indices_elements[i].value = annotation.answer.indices[i];
             if (i != annotation.answer.spans.length - 1) {
-                span_elements[i].parentNode.nextSibling.innerHTML = '<a href="delete_span" onclick="return delete_span(this);">&#9473;</a>';
+                span_elements[i].parentNode.nextSibling.innerHTML = '<a id="delete_span" href="#" onclick="return delete_span(this);">&#9473;</a>';
             } else {
-                span_elements[i].parentNode.nextSibling.innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>';
+                span_elements[i].parentNode.nextSibling.innerHTML = '<a id="add_span" href="#" onclick="return add_span(this);">&#10010;</a>';
             }
         }
 
@@ -842,18 +842,18 @@ function add_span(el) {
         var new_cell = new_row.insertCell(0);
         new_cell.innerHTML = '<textarea readonly rows=3 placeholder="Highlight the answer(s) in the passage" id="span-' + span_count + '" name="span-' + span_count + '"></textarea><br><input type="text" readonly id="indices-' + span_count + '">';
         var new_ref = new_row.insertCell(1);
-        new_ref.innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>';
+        new_ref.innerHTML = '<a href="#" id="add_span" onclick="return add_span(this);">&#10010;</a>';
         document.getElementById("span-" + span_count).oninput = run_validations_span;
         if (span_count >= 1) {
             var prev_row = ans_table.rows[new_row.rowIndex - 1];
             var row_sub_link = prev_row.cells[prev_row.cells.length - 1];
-            row_sub_link.innerHTML = ' <a href="delete_span" onclick="return delete_span(this);">&#9473;</a>';
+            row_sub_link.innerHTML = ' <a href="#" id="delete_span" onclick="return delete_span(this);">&#9473;</a>';
         }
     } else {
         document.getElementById("span-" + span_count).parentNode.parentNode.style.display = "";
-        document.getElementById("span-" + span_count).parentNode.nextSibling.innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>';
+        document.getElementById("span-" + span_count).parentNode.nextSibling.innerHTML = '<a id="add_span" href="#" onclick="return add_span(this);">&#10010;</a>';
         if (span_count >= 1) {
-            el.outerHTML = ' <a href="delete_span" onclick="return delete_span(this);">&#9473;</a>';
+            el.outerHTML = ' <a href="#" id="delete_span" onclick="return delete_span(this);">&#9473;</a>';
         }
     }
 
