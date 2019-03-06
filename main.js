@@ -6,8 +6,8 @@ fetch_passages_with_retries(3);
 var current_question_id = "";
 var edit_mode = false;
 var annotations = {};
-var min_questions = 20;
-var num_passages = 5;
+var min_questions = 12;
+var num_passages = 3;
 var global_timeout = null;
 var passage_ids = [];
 
@@ -507,12 +507,16 @@ function reset_higlight() {
     var span4a = parent.getElementsByClassName("span4a_high");
     var span6a = parent.getElementsByClassName("span6a_high");
     var span6b = parent.getElementsByClassName("span6b_high");
+    var span9a = parent.getElementsByClassName("span9a_high");
+    var span9b = parent.getElementsByClassName("span9b_high");
+    var span9c = parent.getElementsByClassName("span9c_high");
+    var span9d = parent.getElementsByClassName("span9d_high");
 
     if (span1a != 'null') {
         reset_class(span1a, "span1a");
     }
     if (span1b != 'null') {
-        reset_class(span1b, "span1a");
+        reset_class(span1b, "span1b");
     }
     if (span2a != 'null') {
         reset_class(span2a, "span2a");
@@ -537,6 +541,18 @@ function reset_higlight() {
     }
     if (span6b != 'null') {
         reset_class(span6b, "span6b");
+    }
+    if (span9a != 'null') {
+        reset_class(span9a, "span9a")
+    }
+    if (span9b != 'null') {
+        reset_class(span9b, "span9b")
+    }
+    if (span9c != 'null') {
+        reset_class(span9c, "span9c")
+    }
+    if (span9d != 'null') {
+        reset_class(span9d, "span9d")
     }
 }
 
@@ -613,6 +629,21 @@ function highlight_q7() {
     reset_class(q_span, "span6a_high");
     var q_span = parent.getElementsByClassName("span6b");
     reset_class(q_span, "span6b_high");
+}
+
+// event on hover over on annotated question
+function highlight_q9() {
+    var parent = document.getElementsByClassName("passage-sample")[0];
+    var q_span = parent.getElementsByClassName("span9a");
+    reset_class(q_span, "span9a_high")
+    var q_span = parent.getElementsByClassName("span3c");
+    reset_class(q_span, "span3c_high")
+    var q_span = parent.getElementsByClassName("span9b");
+    reset_class(q_span, "span9b_high")
+    var q_span = parent.getElementsByClassName("span9c");
+    reset_class(q_span, "span9c_high")
+    var q_span = parent.getElementsByClassName("span9d");
+    reset_class(q_span, "span9d_high")
 }
 
 function create_tabs(prefix) {

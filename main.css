@@ -272,7 +272,7 @@ h4 {
 }
 
 .span1a_high {
-    color: red
+    background-color: lightblue
 }
 
 .span1b {
@@ -280,7 +280,7 @@ h4 {
 }
 
 .span1b_high {
-    color: red
+    background-color: lightgreen
 }
 
 .span2a {
@@ -288,7 +288,7 @@ h4 {
 }
 
 .span2a_high {
-    color: red
+    background-color: lightblue
 }
 
 .span2b {
@@ -296,7 +296,7 @@ h4 {
 }
 
 .span2b_high {
-    color: red
+    background-color: lightgreen
 }
 
 .span3a {
@@ -304,7 +304,7 @@ h4 {
 }
 
 .span3a_high {
-    color: red
+    background-color: lightblue
 }
 
 .span34b {
@@ -312,7 +312,7 @@ h4 {
 }
 
 .span34b_high {
-    color: red
+    background-color: lightgreen
 }
 
 .span3c {
@@ -320,7 +320,7 @@ h4 {
 }
 
 .span3c_high {
-    color: red
+    background-color: lightgreen
 }
 
 .span4a {
@@ -328,7 +328,7 @@ h4 {
 }
 
 .span4a_high {
-    color: red
+    background-color: lightblue
 }
 
 .span6a {
@@ -336,7 +336,7 @@ h4 {
 }
 
 .span6a_high {
-    color: red
+    background-color: lightblue
 }
 
 .span6b {
@@ -344,7 +344,39 @@ h4 {
 }
 
 .span6b_high {
-    color: red
+    background-color: lightgreen
+}
+
+.span9a {
+    color: black
+}
+
+.span9a_high {
+    background-color: lightgreen
+}
+
+.span9b {
+    color: black
+}
+
+.span9b_high {
+    background-color: yellow
+}
+
+.span9c {
+    color: black
+}
+
+.span9c_high {
+    background-color: pink
+}
+
+.span9d {
+    color: black
+}
+
+.span9d_high {
+    background-color: orange
 }
 
 .annotated {
