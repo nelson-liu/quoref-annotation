@@ -111,8 +111,6 @@ function deselect_span() {
 
     if (span_elements.length > 0) {
         for (var i = 0; i < span_elements.length; i++) {
-            // remove spans
-            //span_elements[i].parentNode.parentNode.remove()
             var mark_node = span_elements[i].parentNode.nextSibling;
             if (mark_node && (mark_node.innerText.charCodeAt().toString().includes("10004") ||
                     mark_node.innerText.charCodeAt().toString().includes("10008"))) {
@@ -122,6 +120,13 @@ function deselect_span() {
             span_elements[i].parentNode.parentNode.style.display = "none";
         }
         document.getElementById("span").checked = false;
+    }
+
+    var indices_elements = get_elements_by_id_starts_with("ans_table", "input", "indices-");
+    if (indices_elements.length > 0) {
+        for (var i = 0; i < indices_elements.length; i++) {
+            indices_elements[i].value = "";
+        }
     }
     document.getElementById("error_panel").innerText = "";
 }
@@ -154,15 +159,20 @@ function modify_previous_question() {
     if (annotation.answer.checked == "span") {
         document.getElementById("span").checked = true;
         var span_elements = get_elements_by_id_starts_with("ans_table", "textarea", "span-");
+        var indices_elements = get_elements_by_id_starts_with("ans_table", "input", "indices-");
+        span_elements.sort(sort_by_name);
+        indices_elements.sort(sort_by_name);
         for (var i = 0; i < annotation.answer.spans.length; i++) {
             span_elements[i].parentNode.parentNode.style.display = "";
             span_elements[i].value = annotation.answer.spans[i];
+            indices_elements[i].value = annotation.answer.indices[i];
             if (i != annotation.answer.spans.length - 1) {
                 span_elements[i].parentNode.nextSibling.innerHTML = '<a href="delete_span" onclick="return delete_span(this);">&#9473;</a>';
             } else {
                 span_elements[i].parentNode.nextSibling.innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>';
             }
         }
+
     } else if (annotation.answer.checked == "no_answer") {
         document.getElementById("no_answer").checked = true;
     }
@@ -212,9 +222,9 @@ function create_text_for_tab() {
 
         var indices_elements = get_indices(true);
         for (var i = 0; i < indices_elements.length; i++) {
-            if (indices_elements[i].innerHTML.trim() != "") {
-                input_indices = input_indices + indices_elements[i].innerHTML.trim() + " ";
-                answer.indices.push(indices_elements[i].innerHTML.trim());
+            if (indices_elements[i].value.trim() != "") {
+                input_indices = input_indices + indices_elements[i].value.trim() + " ";
+                answer.indices.push(indices_elements[i].value.trim());
             }
         }
 
@@ -764,7 +774,7 @@ function get_spans(visible) {
 
 // Get all the current indices
 function get_indices(visible) {
-    var span_elements = get_elements_by_id_starts_with("ans_table", "span", "indices-");
+    var span_elements = get_elements_by_id_starts_with("ans_table", "input", "indices-");
     var cand_spans = [];
     for (var j = 0; j < span_elements.length; j++) {
         if (visible) {
@@ -825,7 +835,7 @@ function add_span(el) {
         var span_count = span_index - span_row_start_index;
         var new_row = ans_table.insertRow(span_index + 1);
         var new_cell = new_row.insertCell(0);
-        new_cell.innerHTML = '<textarea readonly rows=5 placeholder="Highlight the answer(s) in the passage" id="span-' + span_count + '" name="span-' + span_count + '"></textarea><br><span id="indices-' + span_count + '"></span>';
+        new_cell.innerHTML = '<textarea readonly rows=3 placeholder="Highlight the answer(s) in the passage" id="span-' + span_count + '" name="span-' + span_count + '"></textarea><br><input type="text" readonly id="indices-' + span_count + '">';
         var new_ref = new_row.insertCell(1);
         new_ref.innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>';
         document.getElementById("span-" + span_count).oninput = run_validations_span;
@@ -873,6 +883,8 @@ function check_question_count() {
 
 function final_submit() {
     var root = document.getElementById("generated_answers");
+    // clear root before we add the answers, in case users double-click
+    root.innerHTML = '<div id="generated_answers"></div>';
     for (var j = 0; j < num_passages; j++) {
         var passage_id_el = document.createElement("input");
         passage_id_el.id = "passage-id-" + j;
@@ -910,6 +922,15 @@ function final_submit() {
                 span_el.style.display = 'none';
                 root.appendChild(span_el);
             }
+            for (var i = 0; i < annotations[key].answer.indices.length; i++) {
+                var indices_el = document.createElement("input");
+                indices_el.id = "indices-" + key + "-" + i;
+                indices_el.name = "indices-" + key + "-" + i;
+                indices_el.type = "text";
+                indices_el.value = annotations[key].answer.indices[i];
+                indices_el.style.display = 'none';
+                root.appendChild(indices_el);
+            }
         } else if (annotations[key].answer.checked == "no_answer") {
             var value_el = document.createElement("input");
             value_el.id = "null-" + key;
@@ -931,10 +952,7 @@ function final_submit() {
     submission_container.appendChild(submit_button);
 
     document.getElementById("submission").style.display = "";
-    //document.getElementById("submitButton").style.display = ""
-    //document.getElementById("submitButton").disabled = false
     document.getElementById("comment").style.display = "";
-    document.getElementsByClassName("main-container")[0].style.display = "none";
 }
 
 function parse_passages(response) {
@@ -998,16 +1016,24 @@ function getPassageSelectionIndices() {
                 }
             }
         }
+
         var selectionStartIndex = start_idx + startIndexInNode;
         var selectionEndIndex = selectionStartIndex + selectedText.length;
         if (selectionStartIndex != selectionEndIndex) {
             // Update the latest span that isn't set.
-            var last_span_id = get_spans(false).length - 1;
-            if (last_span_id > -1) {
-                document.getElementById("span-" + last_span_id).value = selectedText;
-                document.getElementById("indices-" + last_span_id).innerHTML = "(" + selectionStartIndex + "," + selectionEndIndex + ")";
+            var visible_spans = get_spans(true);
+            var visible_indices = get_indices(true);
+            if (visible_spans.length > 0) {
+                visible_spans.sort(sort_by_name);
+                visible_indices.sort(sort_by_name);
+                visible_spans[visible_spans.length - 1].value = selectedText;
+                visible_indices[visible_indices.length - 1].value = "(" + selectionStartIndex + "," + selectionEndIndex + ")";
                 run_validations_span();
             }
         }
     }
+}
+
+function sort_by_name(a, b) {
+    return a.id.toLowerCase().localeCompare(b.id.toLowerCase());
 }
