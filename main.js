@@ -793,13 +793,14 @@ function delete_span(el) {
     var curr_row = el.parentNode.parentNode;
     var curr_span_id = el.parentNode.parentNode.firstChild.firstChild.id;
     var start_span_id = parseInt(curr_span_id.replace("span-", ""));
-    var visible_spans = get_spans(true);
-    //var last_span_id = parseInt(visible_spans[visible_spans.length - 1].id.replace("span-", ""))
     var last_span_id = get_spans(false).length;
     for (var i = start_span_id + 1; i < last_span_id; i++) {
         var curr_span = document.getElementById("span-" + i);
         curr_span.id = "span-" + (i - 1);
         curr_span.name = "span-" + (i - 1);
+        var curr_indices = document.getElementById("indices-" + i);
+        curr_indices.id = "indices-" + (i - 1);
+        curr_indices.name = "indices-" + (i - 1);
     }
 
     var clone = curr_row.cloneNode(true);
@@ -809,6 +810,10 @@ function delete_span(el) {
     curr_value.id = "span-" + (i - 1);
     curr_value.name = "span-" + (i - 1);
     curr_value.value = "";
+    var curr_indices = clone.cells[0].lastChild;
+    curr_indices.id = "indices-" + (i - 1);
+    curr_indices.name = "indices-" + (i - 1);
+    curr_indices.value = "";
 
     if (clone.cells.length == 3) {
         clone.deleteCell(1);
