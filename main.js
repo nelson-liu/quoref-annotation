@@ -226,7 +226,7 @@ function create_text_for_tab() {
 
         ai_overlap = bow_overlap(document.getElementById('ai-answer').value, input_spans, 1.0);
 
-        qa_text = qa_text + input_spans;
+        qa_text = qa_text + input_spans + "\nIndices: " + input_indices;
         duplicate_check = duplicate_qa_check(qa_text);
 
     } else if (document.getElementById("no_answer").checked) {
@@ -827,7 +827,6 @@ function add_span(el) {
         var new_row = ans_table.insertRow(span_index + 1);
         var new_cell = new_row.insertCell(0);
         new_cell.innerHTML = '<textarea readonly rows=5 placeholder="Highlight the answer(s) in the passage" id="span-' + span_count + '" name="span-' + span_count + '"></textarea><br><span id="indices-' + span_count + '"></span>';
-        console.log(new_cell);
         var new_ref = new_row.insertCell(1);
         new_ref.innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>';
         document.getElementById("span-" + span_count).oninput = run_validations_span;
@@ -1003,9 +1002,6 @@ function getPassageSelectionIndices() {
         var selectionStartIndex = start_idx + startIndexInNode;
         var selectionEndIndex = selectionStartIndex + selectedText.length;
         if (selectionStartIndex != selectionEndIndex) {
-            console.log("Selected text: " + selectedText);
-            console.log("Start index: " + selectionStartIndex);
-            console.log("End index: " + selectionEndIndex);
             // Update the latest span that isn't set.
             var last_span_id = get_spans(false).length - 1;
             if (last_span_id > -1) {
@@ -1013,7 +1009,6 @@ function getPassageSelectionIndices() {
                 document.getElementById("indices-" + last_span_id).innerHTML = "(" + selectionStartIndex + "," + selectionEndIndex + ")";
                 run_validations_span();
             }
-            console.log(last_span_id);
         }
     }
 }
