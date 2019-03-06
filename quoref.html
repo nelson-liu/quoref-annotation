@@ -157,7 +157,7 @@
                                         <table id="ans_table">
                                             <tr id="span_row">
                                                 <td>
-                                                    <input type="radio" name="answer" id="span" value='span' onchange="return add_span(this);">Select span
+                                                    <input type="radio" name="answer" id="span" value='span' onchange="return add_span(this);">Highlight the answer(s)
                                                 </td>
                                             </tr>
                                             <tr id="no_answer_row">
@@ -171,7 +171,8 @@
                                 <div id="rightcolumn">
                                     <h4>AI predicted the answer below <br />(wait for answer to appear below)</h4>
                                     <div class="ai_answer" align="center">
-                                        <input id="ai-answer" type="text" readonly />
+                                        <textarea id="ai-answer" type="text" readonly>
+                                        </textarea>
                                     </div>
                                 </div>
                             </div>

@@ -1,6 +1,6 @@
 var record_count = 0;
 var total_question_cnt = 0;
-var question_num = 0
+var question_num = 0;
 var passages = [];
 fetch_passages_with_retries(3);
 var current_question_id = "";
@@ -77,7 +77,7 @@ function get_elements_by_id_starts_with(container, selector_tag, prefix) {
     return items;
 }
 
-// Get elements matching class rege
+// Get elements matching class regex
 function get_elements_by_class_starts_with(container, selector_tag, prefix) {
     var items = [];
     var candidate_el = document.getElementsByClassName(container)[0].getElementsByTagName(selector_tag);
@@ -89,7 +89,7 @@ function get_elements_by_class_starts_with(container, selector_tag, prefix) {
     return items;
 }
 
-// Attach AI-answer fetch to the quest text keyup event
+// Attach AI-answer fetch to the question text keyup event
 function initialize_answer() {
     document.getElementById('ai-answer').value = 'AI is thinking ...';
 
@@ -99,18 +99,15 @@ function initialize_answer() {
 
     global_timeout = setTimeout(function() {
         global_timeout = null;
-        //how_many_check();
         invoke_bidaf_with_retries(3);
     }, 800);
-
-    //run_validations_date_digit();
 }
 
 // deselect span type answer
 function deselect_span() {
     var span_ind = document.getElementById("span_row").rowIndex;
     var ans_table = document.getElementById("ans_table");
-    var span_elements = get_elements_by_id_starts_with("ans_table", "input", "span-");
+    var span_elements = get_elements_by_id_starts_with("ans_table", "textarea", "span-");
 
     if (span_elements.length > 0) {
         for (var i = 0; i < span_elements.length; i++) {
@@ -156,7 +153,7 @@ function modify_previous_question() {
 
     if (annotation.answer.checked == "span") {
         document.getElementById("span").checked = true;
-        var span_elements = get_elements_by_id_starts_with("ans_table", "input", "span-");
+        var span_elements = get_elements_by_id_starts_with("ans_table", "textarea", "span-");
         for (var i = 0; i < annotation.answer.spans.length; i++) {
             span_elements[i].parentNode.parentNode.style.display = "";
             span_elements[i].value = annotation.answer.spans[i];
@@ -166,8 +163,6 @@ function modify_previous_question() {
                 span_elements[i].parentNode.nextSibling.innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>';
             }
         }
-        //var last_row = span_elements[i - 1].parentNode.parentNode
-        //last_row.cells[last_row.cells.length - 1].innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>';
     } else if (annotation.answer.checked == "no_answer") {
         document.getElementById("no_answer").checked = true;
     }
@@ -176,15 +171,13 @@ function modify_previous_question() {
 
     document.getElementById('ai-answer').value = 'AI is thinking ...';
     initialize_answer();
-    document.getElementById("input-question").dispatchEvent(new KeyboardEvent('keyup', {
-        'key': ' '
-    }));
 }
 
 // Create text for the bottom rectangle tab
 function create_text_for_tab() {
     var answer = {
         "spans": [],
+        "indices": [],
         "no_answer": false,
         "checked": "",
         "ai_answer": ""
@@ -207,12 +200,21 @@ function create_text_for_tab() {
         var length_flag = flags.length_flag;
         var i_cnt = 0;
         var input_spans = "";
+        var input_indices = "";
 
         var span_elements = get_spans(true);
         for (var i = 0; i < span_elements.length; i++) {
             if (span_elements[i].value.trim() != "") {
                 input_spans = input_spans + "[" + span_elements[i].value.trim() + "] ";
                 answer.spans.push(span_elements[i].value.trim());
+            }
+        }
+
+        var indices_elements = get_indices(true);
+        for (var i = 0; i < indices_elements.length; i++) {
+            if (indices_elements[i].innerHTML.trim() != "") {
+                input_indices = input_indices + indices_elements[i].innerHTML.trim() + " ";
+                answer.indices.push(indices_elements[i].innerHTML.trim());
             }
         }
 
@@ -321,7 +323,6 @@ function reset() {
     }
     var tabs = document.getElementsByClassName("rectangles");
     for (var i = 0; i < tabs.length; i++) {
-        //tabs[i].onclick = modify_previous_question
         document.getElementById(tabs[i].id).style.pointerEvents = 'auto';
     }
 }
@@ -444,11 +445,9 @@ function span_match_check() {
             if (document.getElementById(span_id)) {
                 var span_value = document.getElementById(span_id).value;
                 var cur_span_row = document.getElementById(span_id).parentNode.parentNode;
-                span_value = span_value.replace(".", "\\.");
-                var pattern = new RegExp(span_value);
                 var passage_str = document.getElementById("input-question").value;
                 passage_str = passage_str + document.getElementsByClassName("passage-" + record_count)[0].innerText;
-                if (pattern.test(passage_str) && span_value.trim().split(" ").length <= 5 && span_value != "") {
+                if (passage_str.includes(span_value) && span_value.trim().split(" ").length <= 5 && span_value != "") {
                     if (cur_span_row.cells.length == 2) {
                         var marker = cur_span_row.insertCell(1);
                         marker.innerHTML = '<p style="color: green;">&#10004;</p>';
@@ -456,7 +455,7 @@ function span_match_check() {
                         var marker = cur_span_row.cells[1];
                         marker.innerHTML = '<p style="color: green;">&#10004;</p>';
                     }
-                } else if (!pattern.test(passage_str)) {
+                } else if (!passage_str.includes(span_value)) {
                     if (cur_span_row.cells.length == 2) {
                         var marker = cur_span_row.insertCell(1);
                         marker.innerHTML = '<p style="color: red;">&#10008;</p>';
@@ -736,7 +735,8 @@ function error_passages() {
 }
 
 function fetch_passages_with_retries(n) {
-    var data_url = "https://s3-us-west-2.amazonaws.com/pradeepd-quoref/data/quoref_passages.json";
+    // var data_url = "https://s3-us-west-2.amazonaws.com/pradeepd-quoref/data/quoref_passages.json";
+    var data_url = "./quoref_passages.json";
     fetch(data_url)
         .then(parse_passages)
         .catch(function(error) {
@@ -749,7 +749,23 @@ function fetch_passages_with_retries(n) {
 
 // Get all the current spans
 function get_spans(visible) {
-    var span_elements = get_elements_by_id_starts_with("ans_table", "input", "span-");
+    var span_elements = get_elements_by_id_starts_with("ans_table", "textarea", "span-");
+    var cand_spans = [];
+    for (var j = 0; j < span_elements.length; j++) {
+        if (visible) {
+            if (span_elements[j].parentNode.parentNode.style.display != "none") {
+                cand_spans.push(span_elements[j]);
+            }
+        } else {
+            cand_spans.push(span_elements[j]);
+        }
+    }
+    return cand_spans;
+}
+
+// Get all the current indices
+function get_indices(visible) {
+    var span_elements = get_elements_by_id_starts_with("ans_table", "span", "indices-");
     var cand_spans = [];
     for (var j = 0; j < span_elements.length; j++) {
         if (visible) {
@@ -780,7 +796,7 @@ function delete_span(el) {
     var clone = curr_row.cloneNode(true);
 
     var curr_value = clone.cells[0].firstChild;
-    curr_value.onkeyup = run_validations_span;
+    curr_value.oninput = run_validations_span;
     curr_value.id = "span-" + (i - 1);
     curr_value.name = "span-" + (i - 1);
     curr_value.value = "";
@@ -792,9 +808,7 @@ function delete_span(el) {
     clone.style.display = "none";
     curr_row.remove();
     document.getElementById("ans_table").getElementsByTagName('tbody')[0].appendChild(clone);
-    document.getElementById("span-0").dispatchEvent(new KeyboardEvent('keyup', {
-        'key': ' '
-    }));
+    run_validations_span()
     return false;
 }
 
@@ -803,7 +817,7 @@ function add_span(el) {
     var ans_table = document.getElementById("ans_table");
     var span_index = el.parentNode.parentNode.rowIndex;
     var span_row_start_index = document.getElementById("span_row").rowIndex;
-    var span_elements = get_elements_by_id_starts_with("ans_table", "input", "span-");
+    var span_elements = get_elements_by_id_starts_with("ans_table", "textarea", "span-");
     var visible_spans = get_spans(true);
 
     var span_count = visible_spans.length;
@@ -812,10 +826,11 @@ function add_span(el) {
         var span_count = span_index - span_row_start_index;
         var new_row = ans_table.insertRow(span_index + 1);
         var new_cell = new_row.insertCell(0);
-        new_cell.innerHTML = '<input type="text" placeholder="highlight the answer in the passage" id="span-' + span_count + '" name="span-' + span_count + '">';
+        new_cell.innerHTML = '<textarea readonly rows=5 placeholder="Highlight the answer(s) in the passage" id="span-' + span_count + '" name="span-' + span_count + '"></textarea><br><span id="indices-' + span_count + '"></span>';
+        console.log(new_cell);
         var new_ref = new_row.insertCell(1);
         new_ref.innerHTML = '<a href="add_span" onclick="return add_span(this);">&#10010;</a>';
-        document.getElementById("span-" + span_count).onkeyup = run_validations_span;
+        document.getElementById("span-" + span_count).oninput = run_validations_span;
         if (span_count >= 1) {
             var prev_row = ans_table.rows[new_row.rowIndex - 1];
             var row_sub_link = prev_row.cells[prev_row.cells.length - 1];
@@ -991,6 +1006,14 @@ function getPassageSelectionIndices() {
             console.log("Selected text: " + selectedText);
             console.log("Start index: " + selectionStartIndex);
             console.log("End index: " + selectionEndIndex);
+            // Update the latest span that isn't set.
+            var last_span_id = get_spans(false).length - 1;
+            if (last_span_id > -1) {
+                document.getElementById("span-" + last_span_id).value = selectedText;
+                document.getElementById("indices-" + last_span_id).innerHTML = "(" + selectionStartIndex + "," + selectionEndIndex + ")";
+                run_validations_span();
+            }
+            console.log(last_span_id);
         }
     }
 }
