@@ -735,8 +735,7 @@ function error_passages() {
 }
 
 function fetch_passages_with_retries(n) {
-    // var data_url = "https://s3-us-west-2.amazonaws.com/pradeepd-quoref/data/quoref_passages.json";
-    var data_url = "./quoref_passages.json";
+    var data_url = "https://s3-us-west-2.amazonaws.com/pradeepd-quoref/data/quoref_passages.json";
     fetch(data_url)
         .then(parse_passages)
         .catch(function(error) {
