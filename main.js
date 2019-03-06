@@ -822,7 +822,7 @@ function delete_span(el) {
     clone.style.display = "none";
     curr_row.remove();
     document.getElementById("ans_table").getElementsByTagName('tbody')[0].appendChild(clone);
-    run_validations_span()
+    run_validations_span();
     return false;
 }
 
