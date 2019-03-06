@@ -10,10 +10,12 @@ MTURK_PROD = 'https://mturk-requester.us-east-1.amazonaws.com'
 
 def main(args):
     endpoint_url = MTURK_PROD if args.publish_for_real else MTURK_SANDBOX
+    access_key_info = open(args.access_key_file).readlines()
+    access_key, secret_access_key = access_key_info[-1].strip().split(",")
 
     mturk = boto3.client('mturk',
-                         aws_access_key_id=args.access_key,
-                         aws_secret_access_key=args.secret_access_key,
+                         aws_access_key_id=access_key,
+                         aws_secret_access_key=secret_access_key,
                          region_name='us-east-1',
                          endpoint_url=endpoint_url)
 
@@ -45,7 +47,6 @@ def main(args):
                     <FrameHeight>1600</FrameHeight>
                     </HTMLQuestion>"""
 
-    print(question_xml, file=open("/tmp/sample_question.xml", "w"))
     description = "Write questions based on the narratives and provide answers. It should take around 30-45 mins"
     for qid in range(30):
         new_hit = mturk.create_hit(
@@ -74,23 +75,13 @@ def main(args):
                           'Country':'US'
                       }]
                 }
-                ## Good tuker pool for NFL
-                # {
-                #       'QualificationTypeId':"3M3HXOD6K9394JG7PUA1AFZAEAR7IR",
-                #       'Comparator': 'EqualTo',
-                #       'IntegerValues':[100]
-                # }
-                ## Good tuker pool for History GT
-                # {
-                #       'QualificationTypeId':"3LRUXMYH0RF97HQYFONT1VJZK4J29O",
-                #       'Comparator': 'EqualTo',
-                #       'IntegerValues':[100]
-                # }            
             ],
         )
-        print("{0}\t{1}\t{2}".format("NFL_"+str(qid),
-                                     "https://worker.mturk.com/mturk/preview?groupId=" + new_hit['HIT']['HITGroupId'],
-                                     new_hit['HIT']['HITId']))
+        url_prefix = "worker" if args.publish_for_real else "workersandbox"
+        group_id = new_hit["HIT"]["HITGroupId"]
+        url = f"https://{url_prefix}.mturk.com/mturk/preview?groupId={group_id}"
+        hit_id = new_hit["HIT"]["HITId"]
+        print(f"quoref_{qid}\t{url}\t{hit_id}")
     print("Available balance:", mturk.get_account_balance()['AvailableBalance'])
 
 if __name__ == "__main__":
@@ -98,8 +89,7 @@ if __name__ == "__main__":
     argparser.add_argument('--html-file', dest='html_file', type=str, required=True)
     argparser.add_argument('--css-file', dest='css_file', type=str, required=True)
     argparser.add_argument('--java-script-file', dest='java_script_file', type=str, required=True)
-    argparser.add_argument('--access-key', dest='access_key', type=str, required=True)
-    argparser.add_argument('--secret-access-key', dest='secret_access_key', type=str, required=True)
+    argparser.add_argument('--access-key-file', dest='access_key_file', type=str, required=True)
     argparser.add_argument('--publish-for-real', action='store_true', dest='publish_for_real',
                            help='Publish to production?')
     args = argparser.parse_args()
