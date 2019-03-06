@@ -1,3 +1,6 @@
+var record_count = 0;
+var total_question_cnt = 0;
+var question_num = 0
 var passages = [];
 fetch_passages_with_retries(3);
 var current_question_id = "";
