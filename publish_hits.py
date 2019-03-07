@@ -1,4 +1,5 @@
 import argparse
+import datetime
 
 import boto3
 from bs4 import BeautifulSoup
@@ -6,6 +7,7 @@ from bs4 import BeautifulSoup
 
 MTURK_SANDBOX = 'https://mturk-requester-sandbox.us-east-1.amazonaws.com'
 MTURK_PROD = 'https://mturk-requester.us-east-1.amazonaws.com'
+LOG_FILE = open("./publish_log.txt", "a+")
 
 
 def main(args):
@@ -48,17 +50,17 @@ def main(args):
                     </HTMLQuestion>"""
 
     description = "Write questions based on the narratives and provide answers. It should take around 30-45 mins"
-    for qid in range(30):
+    print(f"\n{datetime.datetime.now()}\n------------------------", file=LOG_FILE)
+    for qid in range(5):
         new_hit = mturk.create_hit(
             Title='Questions about narratives',
             Description=description,
             Keywords='question answering',
             Reward='5.0',
-            MaxAssignments=5,
+            MaxAssignments=10,
             LifetimeInSeconds=172800,
             AssignmentDurationInSeconds=172800,
             AutoApprovalDelayInSeconds=259200,
-            # AutoApprovalDelayInSeconds=86400,
             Question=question_xml,
             QualificationRequirements=[
                 # Master Qualification Sandbox 2ARFPLSP75KLA8M8DH1HTEQVJT3SY6
@@ -81,7 +83,8 @@ def main(args):
         group_id = new_hit["HIT"]["HITGroupId"]
         url = f"https://{url_prefix}.mturk.com/mturk/preview?groupId={group_id}"
         hit_id = new_hit["HIT"]["HITId"]
-        print(f"quoref_{qid}\t{url}\t{hit_id}")
+        print(f"quoref_{qid}\t{url}\t{hit_id}", file=LOG_FILE)
+    LOG_FILE.close()
     print("Available balance:", mturk.get_account_balance()['AvailableBalance'])
 
 if __name__ == "__main__":
