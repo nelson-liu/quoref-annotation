@@ -1,37 +1,54 @@
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
         <title>Smart Question Answering</title>
         <link href="main.css" rel="stylesheet" />
         <script src="main.js"></script>
-
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     </head>
 
     <body>
         <form name='mturk_form' method='post' id='mturk_form' action='https://www.mturk.com/mturk/externalSubmit'>
             <input type='hidden' value='' name='assignmentId' id='assignmentId' />
-            <div id="root">
-                <h2>Questions that require tracking entity references</h2>
-                <a href="collapse" onclick="return collapse();" id="collapse_link"><u>(Click to collapse)</u></a>
-                <div class="annotated">
-                    <div>
-			<p>
-			<b>This is a pilot annotation task, and we are still trying to assess its feasibility. Once we get an understanding of
-			how difficult this task is, we will update the pay rate accordingly, and will add more HITs. Your feedback will greatly help us in this process.
-			So please remember to use the feedback box at the bottom of this page to let us know what you think!</b>
-			</p>
-                        <p>
-                            In this task, you will look at paragraphs that contain several phrases that are references to names of
-                            people, places, or things. You will notice that multiple phrases often refer to the same person, place, or thing.
-                            For example, in the first sentence from sample paragraph below, the names <i>Jack Dawkins</i> and <i>the Artful Dodger</i>
-                            refer to the same person. Your job is to assess the skills of an AI system at identifying the connection between
-                            phrases that refer to the same entity. To do so, you will ask it questions that involve applying these skills, and
-                            <b>find questions that the AI system cannot answer</b>. Here are some kinds of questions you can ask for the
-                            paragraph below.
-                        </p>
+            <div id="root" class="container">
+                <div class="row">
+                    <div class="col">
+                        <h1 class="text-center">Questions that require tracking entity references</h1>
+                        <div class="card">
+                            <a class="card-header" data-toggle="collapse" href="#collapseInstructions" aria-expanded="true" aria-controls="collapseInstructions">
+                                <h3> Instructions (click to collapse) </h3>
+                            </a>
+                            <div id="collapseInstructions" class="collapse show">
+                                <div class="card-body">
+                                    <p class="card-text">
+			                                  <b>This is a pilot annotation task, and we are still trying to assess its feasibility. Once we get an understanding of
+			                                      how difficult this task is, we will update the pay rate accordingly, and will add more HITs. Your feedback will greatly help us in this process.
+			                                      So please remember to use the feedback box at the bottom of this page to let us know what you think!</b>
+			                              </p>
+                                    <p class="card-text">
+                                        In this task, you will look at paragraphs that contain several phrases that are references to names of
+                                        people, places, or things. You will notice that multiple phrases often refer to the same person, place, or thing.
+                                        For example, in the first sentence from sample paragraph below, the names <i>Jack Dawkins</i> and <i>the Artful Dodger</i>
+                                        refer to the same person. Your job is to assess the skills of an AI system at identifying the connection between
+                                        phrases that refer to the same entity. To do so, you will ask it questions that involve applying these skills, and
+                                        <b>find questions that the AI system cannot answer</b>. Here are some kinds of questions you can ask for the
+                                        paragraph below.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div class="annotated">
                     <div align="left">
                         <h4>
                             <b>Example questions</b>

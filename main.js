@@ -891,19 +891,6 @@ function add_span(el) {
     return false;
 }
 
-// Collapse and Expand instructions
-function collapse() {
-    var annotated_el = document.getElementsByClassName("annotated")[0];
-    if (annotated_el.style.display == "none") {
-        annotated_el.style.display = "";
-        document.getElementById("collapse_link").innerText = "(Click to collapse)";
-    } else {
-        annotated_el.style.display = "none";
-        document.getElementById("collapse_link").innerText = "(Click to expand)";
-    }
-    return false;
-}
-
 function check_question_count() {
     if (total_question_cnt < min_questions) {
         document.getElementById("ready_submit").title = "Must write " + (min_questions - total_question_cnt) + " more questions to submit";
