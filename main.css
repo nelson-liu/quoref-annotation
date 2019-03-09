@@ -1,25 +1,12 @@
-#exampleQuestions > .card:hover {
+#exampleQuestions > .card:hover, #questionsWritten > .card:hover {
     border-color: rgba(82, 168, 236, 0.8);
     box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
-}
-
-#ai-answer {
-    background-color: lightcoral;
-    /*#D2B4DE;*/
-    text-align: center;
-    display: block
 }
 
 .answer {
     line-height: 2em;
     font-size: 14px
 }
-
-.ai_answer {
-    resize: both;
-    overflow: auto;
-}
-
 
 .bottom_panel {
     float: right;
@@ -90,44 +77,6 @@
 
 }
 
-.btn {
-    float: left;
-    text-decoration: none;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 1em;
-    margin-right: 5px;
-    margin-bottom: 10px;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    border: none;
-    color: #fff !important;
-    display: block;
-    background: #2085bc;
-    padding: .9375em 1.625em;
-    -webkit-transition: background-color .2s ease, opacity .2s ease;
-    transition: background-color .2s ease, opacity .2s ease
-}
-
-.btn-submit {
-    float: left;
-    text-decoration: none;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 0.75em;
-    margin-right: 5px;
-    margin-bottom: 10px;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    border: none;
-    color: #fff !important;
-    display: block;
-    background: darkgray;
-    padding: .9375em 1.625em;
-    -webkit-transition: background-color .2s ease, opacity .2s ease;
-    transition: background-color .2s ease, opacity .2s ease
-}
-
 .ans_span {
     display: inline;
 }
@@ -150,10 +99,6 @@
 #rightcolumn {
     background-color: #d1e0e0;
     width: 50%;
-}
-
-#bottomrow {
-    float: left;
 }
 
 #wrapper {
@@ -262,12 +207,6 @@ select {
     border: solid 2px darkred;
 }
 
-#ready_submit {
-    height: 50px;
-    min-width: 100px;
-    background: darkgray;
-}
-
 #comment {
     margin: 0 auto;
     width: 600px;
@@ -276,4 +215,8 @@ select {
 
 #submission_container {
     margin-left: 45%
+}
+
+.card-body {
+    padding: 1.0rem;
 }

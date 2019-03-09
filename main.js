@@ -75,12 +75,10 @@ function get_elements_by_class_starts_with(container, selector_tag, prefix) {
 }
 
 function getAIAnswer() {
-    document.getElementById('ai-answer').value = 'AI is thinking ...';
-
+    document.getElementById('ai-answer').innerText = 'AI is thinking ...';
     if (global_timeout != null) {
         clearTimeout(global_timeout);
     }
-
     global_timeout = setTimeout(function() {
         global_timeout = null;
         invoke_bidaf_with_retries(3);
@@ -162,8 +160,7 @@ function modify_previous_question() {
     }
 
     document.getElementById("input-question").value = annotation.question;
-
-    document.getElementById('ai-answer').value = 'AI is thinking ...';
+    document.getElementById('ai-answer').innerText = 'AI is thinking ...';
     getAIAnswer();
 }
 
@@ -218,7 +215,7 @@ function create_text_for_tab() {
             empty_qa = empty_qa || true;
         }
 
-        ai_overlap = bow_overlap(document.getElementById('ai-answer').value, input_spans, 1.0);
+        ai_overlap = bow_overlap(document.getElementById('ai-answer').innerText, input_spans, 1.0);
 
         qa_text = qa_text + input_spans + "\nIndices: " + input_indices;
         duplicate_check = duplicate_qa_check(qa_text);
@@ -226,14 +223,14 @@ function create_text_for_tab() {
     } else if (document.getElementById("no_answer").checked) {
         answer.no_answer = true;
         answer.checked = "no_answer";
-        ai_overlap = document.getElementById('ai-answer').value == null;
+        ai_overlap = document.getElementById('ai-answer').innerText == null;
         qa_text = qa_text + "[NONE]";
         duplicate_check = duplicate_qa_check(qa_text);
     } else {
         empty_qa = empty_qa || true;
     }
 
-    answer.ai_answer = document.getElementById('ai-answer').value;
+    answer.ai_answer = document.getElementById('ai-answer').innerText;
 
     return {
         "qa_text": qa_text,
@@ -304,7 +301,7 @@ function create_question() {
 
 function reset() {
     document.getElementById("input-question").value = "";
-    document.getElementById("ai-answer").value = "";
+    document.getElementById("ai-answer").innerText = "";
     document.getElementById("error_panel").innerText = "";
     document.getElementById("no_answer").checked = false;
     deselect_span();
@@ -555,7 +552,7 @@ function reset_tabs() {
 }
 
 function invoke_bidaf_with_retries(n) {
-    document.getElementById('ai-answer').value = "AI is thinking ...";
+    document.getElementById('ai-answer').innerText = "AI is thinking ...";
     var r = {
         passage: document.getElementsByClassName('passage-' + record_count)[0].innerText,
         question: document.getElementById('input-question').value
@@ -584,21 +581,20 @@ function resolve_response(response) {
     if (response.status !== 200) {
         console.log('Looks like there was a problem. Status Code: ' +
                     response.status);
-        document.getElementById('ai-answer').value = "";
+        document.getElementById('ai-answer').innerText = "";
         return;
     }
 
     // Examine the text in the response
     response.json().then(function(data) {
-        var ai_answer_container = document.getElementsByClassName("ai_answer")[0];
         var ai_input = document.getElementById('ai-answer');
-        ai_input.value = data["best_span_str"];
+        ai_input.innerText = data["best_span_str"];
         return;
     });
 }
 
 function error_response() {
-    document.getElementById("ai-answer").value = "Error while fetching AI answer";
+    document.getElementById("ai-answer").innerText = "Error while fetching AI answer";
 }
 
 function fetch_passages_with_retries(n) {
@@ -778,12 +774,11 @@ function final_submit() {
         question_el.style.display = 'none';
         root.appendChild(question_el);
 
-        var ai_answer = document.createElement("input");
+        var ai_answer = document.createElement("div");
         ai_answer.id = "ai-answer-" + key;
         ai_answer.name = "ai-answer-" + key;
-        ai_answer.type = "text";
         ai_answer.style.display = 'none';
-        ai_answer.value = annotations[key].answer.ai_answer;
+        ai_answer.innerText = annotations[key].answer.ai_answer;
         root.appendChild(ai_answer);
 
         if (annotations[key].answer.checked == "span") {

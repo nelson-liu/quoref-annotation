@@ -231,7 +231,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <div class="card sticky-top">
+                                    <div class="card">
                                         <div class="card-header">
                                             <h2>
                                                 Passage <span id="passageNum"></span>
@@ -252,8 +252,8 @@
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <h2>Write a question about the passage</h2>
-                                    <div class="question">
+                                    <div class="row">
+                                        <h2>Write a question about the passage</h2>
                                         <input type="text" class="form-control" id="input-question" placeholder="Write a question here!" onkeyup="getAIAnswer();">
                                     </div>
                                     <div class="row mt-4">
@@ -271,24 +271,77 @@
                                                     </td>
                                                 </tr>
                                             </table>
+                                            <button type="button" id="next_question" class="btn btn-primary mt-4" onclick="create_question();">
+                                                Add Question
+                                            </button>
                                         </div>
                                         <div class="col">
-                                            <h4>AI predicted the answer below <br />(wait for answer to appear below)</h4>
-                                            <div class="ai_answer" align="center">
-                                                <textarea id="ai-answer" type="text" readonly>
-                                                </textarea>
+                                            <h4>AI predicted:<br />(wait for answer to appear below)</h4>
+                                            <div class="card bg-light">
+                                                <div class="card-body">
+                                                    <samp id="ai-answer"></samp>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="wrapper-outer">
-                                        <div class="horizontal-scroll-wrapper">
-                                        </div>
-                                        <br />
-                                        <div id="bottomrow">
-                                            <button id="next_question" type="button" class="btn-submit" onclick="create_question();">
-                                                Add Question
-                                            </button>
+                                    <div class="horizontal-scroll-wrapper">
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col">
                                             <div id="error_panel">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col" id="questionsWritten">
+                                            <h3>Questions written:</h3>
+                                            <div class="card mt-2">
+                                                <div class="card-body">
+                                                    <p>This is some text within a card body.</p>
+                                                    <button class="btn btn-primary mr-2">Edit</a>
+                                                    <button class="btn btn-danger">Delete</a>
+                                                </div>
+                                            </div>
+                                            <div class="card mt-2">
+                                                <div class="card-body">
+                                                    This is some text within a card body.
+                                                </div>
+                                            </div>
+                                            <div class="card mt-2">
+                                                <div class="card-body">
+                                                    This is some text within a card body.
+                                                </div>
+                                            </div>
+                                            <div class="card mt-2">
+                                                <div class="card-body">
+                                                    This is some text within a card body.
+                                                </div>
+                                            </div>
+                                            <div class="card mt-2">
+                                                <div class="card-body">
+                                                    This is some text within a card body.
+                                                </div>
+                                            </div>
+                                            <div class="card mt-2">
+                                                <div class="card-body">
+                                                    This is some text within a card body.
+                                                </div>
+                                            </div>
+                                            <div class="card mt-2">
+                                                <div class="card-body">
+                                                    This is some text within a card body.
+                                                </div>
+                                            </div>
+                                            <div class="card mt-2">
+                                                <div class="card-body">
+                                                    This is some text within a card body.
+                                                </div>
+                                            </div>
+                                            <div class="card mt-2">
+                                                <div class="card-body">
+                                                    This is some text within a card body.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -299,15 +352,15 @@
                 </div>
                 <br/>
                 <div class="bottom_panel">
-                    <button id="ready_submit" type="button" class="btn" onclick="final_submit()" onmouseover="check_question_count();">
+                    <button id="ready_submit" type="button" class="btn btn-primary" onclick="final_submit()" onmouseover="check_question_count();">
                         Ready to Submit HIT
                     </button>
 
-                    <button id="prev_passage" type="button" class="btn" onclick="populate_passage('previous');">
+                    <button id="prev_passage" type="button" class="btn btn-primary" onclick="populate_passage('previous');">
                         Previous Passage
                     </button>
 
-                    <button id="next_passage" type="button" class="btn" onclick="populate_passage('next');">
+                    <button id="next_passage" type="button" class="btn btn-primary" onclick="populate_passage('next');">
                         Next Passage
                     </button>
 
