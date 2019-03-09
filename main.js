@@ -2,7 +2,6 @@ var record_count = 0;
 var total_question_cnt = 0;
 var question_num = 0;
 var passages = [];
-fetch_passages_with_retries(3);
 var current_question_id = "";
 var edit_mode = false;
 var annotations = {};
@@ -10,7 +9,13 @@ var min_questions = 12;
 var num_passages = 3;
 var global_timeout = null;
 var passage_ids = [];
+fetch_passages_with_retries(3);
 
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize question and passage counters
+    document.getElementById("numQuestionsWritten").innerText = "0/" + min_questions;
+    document.getElementById("passageNum").innerText = "1/" + num_passages;
+});
 
 document.onkeydown = function(event) {
     // on enter press override to create question
