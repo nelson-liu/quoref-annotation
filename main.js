@@ -45,7 +45,7 @@ function bow_overlap(a, b, threshold) {
 
     var overlap = Array.from(intersection);
     var result = overlap.length / Math.max(set1_difference.size, set2_difference.size);
-    return (result == threshold);
+    return (result >= threshold);
 }
 
 
