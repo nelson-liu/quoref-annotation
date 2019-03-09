@@ -7,8 +7,8 @@ var edit_mode = false;
 var annotations = {};
 var min_questions = 12;
 var num_passages = 3;
-var global_timeout = null;
 var passage_ids = [];
+var global_timeout = null;
 fetch_passages_with_retries(3);
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -94,8 +94,7 @@ function get_elements_by_class_starts_with(container, selector_tag, prefix) {
     return items;
 }
 
-// Attach AI-answer fetch to the question text keyup event
-function initialize_answer() {
+function getAIAnswer() {
     document.getElementById('ai-answer').value = 'AI is thinking ...';
 
     if (global_timeout != null) {
@@ -185,7 +184,7 @@ function modify_previous_question() {
     document.getElementById("input-question").value = annotation.question;
 
     document.getElementById('ai-answer').value = 'AI is thinking ...';
-    initialize_answer();
+    getAIAnswer();
 }
 
 // Create text for the bottom rectangle tab
@@ -500,158 +499,6 @@ function span_match_check() {
     };
 }
 
-// remove annotation highlights on mouse out
-function reset_higlight() {
-    var parent = document.getElementsByClassName("passage-sample")[0];
-    var span1a = parent.getElementsByClassName("span1a_high");
-    var span1b = parent.getElementsByClassName("span1b_high");
-    var span2a = parent.getElementsByClassName("span2a_high");
-    var span2b = parent.getElementsByClassName("span2b_high");
-    var span3a = parent.getElementsByClassName("span3a_high");
-    var span34b = parent.getElementsByClassName("span34b_high");
-    var span3c = parent.getElementsByClassName("span3c_high");
-    var span4a = parent.getElementsByClassName("span4a_high");
-    var span6a = parent.getElementsByClassName("span6a_high");
-    var span6b = parent.getElementsByClassName("span6b_high");
-    var span9a = parent.getElementsByClassName("span9a_high");
-    var span9b = parent.getElementsByClassName("span9b_high");
-    var span9c = parent.getElementsByClassName("span9c_high");
-    var span9d = parent.getElementsByClassName("span9d_high");
-
-    if (span1a != 'null') {
-        reset_class(span1a, "span1a");
-    }
-    if (span1b != 'null') {
-        reset_class(span1b, "span1b");
-    }
-    if (span2a != 'null') {
-        reset_class(span2a, "span2a");
-    }
-    if (span2b != 'null') {
-        reset_class(span2b, "span2b");
-    }
-    if (span3a != 'null') {
-        reset_class(span3a, "span3a");
-    }
-    if (span34b != 'null') {
-        reset_class(span34b, "span34b");
-    }
-    if (span3c != 'null') {
-        reset_class(span3c, "span3c");
-    }
-    if (span4a != 'null') {
-        reset_class(span4a, "span4a");
-    }
-    if (span6a != 'null') {
-        reset_class(span6a, "span6a");
-    }
-    if (span6b != 'null') {
-        reset_class(span6b, "span6b");
-    }
-    if (span9a != 'null') {
-        reset_class(span9a, "span9a")
-    }
-    if (span9b != 'null') {
-        reset_class(span9b, "span9b")
-    }
-    if (span9c != 'null') {
-        reset_class(span9c, "span9c")
-    }
-    if (span9d != 'null') {
-        reset_class(span9d, "span9d")
-    }
-}
-
-// Util class for changing class name to apply css
-function reset_class(q_span, class_name) {
-    count = q_span.length - 1;
-    while (count >= 0) {
-        q_span[count].className = class_name;
-        count = count - 1;
-    }
-}
-
-// event on hover over on annotated question
-function highlight_q1() {
-    var parent = document.getElementsByClassName("passage-sample")[0];
-    var q_span = parent.getElementsByClassName("span1a");
-    reset_class(q_span, "span1a_high");
-    var q_span = parent.getElementsByClassName("span1b");
-    reset_class(q_span, "span1b_high");
-}
-
-// event on hover over on annotated question
-function highlight_q2() {
-    var parent = document.getElementsByClassName("passage-sample")[0];
-    var q_span = parent.getElementsByClassName("span2a");
-    reset_class(q_span, "span2a_high");
-    var q_span = parent.getElementsByClassName("span2b");
-    reset_class(q_span, "span2b_high");
-}
-
-// event on hover over on annotated question
-function highlight_q3() {
-    var parent = document.getElementsByClassName("passage-sample")[0];
-    var q_span = parent.getElementsByClassName("span3a");
-    reset_class(q_span, "span3a_high");
-    var q_span = parent.getElementsByClassName("span34b");
-    reset_class(q_span, "span34b_high");
-    var q_span = parent.getElementsByClassName("span3c");
-    reset_class(q_span, "span3c_high");
-}
-
-// event on hover over on annotated question
-function highlight_q4() {
-    var parent = document.getElementsByClassName("passage-sample")[0];
-    var q_span = parent.getElementsByClassName("span4a");
-    reset_class(q_span, "span4a_high");
-    var q_span = parent.getElementsByClassName("span34b");
-    reset_class(q_span, "span34b_high");
-}
-
-// event on hover over on annotated question
-function highlight_q5() {
-    var parent = document.getElementsByClassName("passage-sample")[0];
-    // spans being highlighted are the same as those for Q4
-    var q_span = parent.getElementsByClassName("span4a");
-    reset_class(q_span, "span4a_high");
-    var q_span = parent.getElementsByClassName("span34b");
-    reset_class(q_span, "span34b_high");
-}
-
-// event on hover over on annotated question
-function highlight_q6() {
-    var parent = document.getElementsByClassName("passage-sample")[0];
-    var q_span = parent.getElementsByClassName("span6a");
-    reset_class(q_span, "span6a_high");
-    var q_span = parent.getElementsByClassName("span6b");
-    reset_class(q_span, "span6b_high");
-}
-
-// event on hover over on annotated question
-function highlight_q7() {
-    var parent = document.getElementsByClassName("passage-sample")[0];
-    var q_span = parent.getElementsByClassName("span6a");
-    reset_class(q_span, "span6a_high");
-    var q_span = parent.getElementsByClassName("span6b");
-    reset_class(q_span, "span6b_high");
-}
-
-// event on hover over on annotated question
-function highlight_q9() {
-    var parent = document.getElementsByClassName("passage-sample")[0];
-    var q_span = parent.getElementsByClassName("span9a");
-    reset_class(q_span, "span9a_high")
-    var q_span = parent.getElementsByClassName("span3c");
-    reset_class(q_span, "span3c_high")
-    var q_span = parent.getElementsByClassName("span9b");
-    reset_class(q_span, "span9b_high")
-    var q_span = parent.getElementsByClassName("span9c");
-    reset_class(q_span, "span9c_high")
-    var q_span = parent.getElementsByClassName("span9d");
-    reset_class(q_span, "span9d_high")
-}
-
 function create_tabs(prefix) {
     var rectangle_containers = [];
     for (var key in annotations) {
@@ -701,10 +548,9 @@ function populate_passage(config) {
     }
     reset_passage_buttons();
     current_question_id = (record_count - 1) + "-" + question_num;
-    document.getElementById("input-question").onkeyup = initialize_answer;
+    document.getElementById("input-question").onkeyup = getAIAnswer;
     reset();
     check_question_count();
-
 }
 
 function reset_passage_buttons() {
@@ -726,29 +572,6 @@ function reset_tabs() {
     for (var i = 0; i < rectange_el.length; i++) {
         rectange_el[i].style.display = "none";
     }
-}
-
-
-function resolve_response(response) {
-    if (response.status !== 200) {
-        console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-        document.getElementById('ai-answer').value = "";
-        return;
-    }
-
-    // Examine the text in the response
-    response.json().then(function(data) {
-        var ai_answer_container = document.getElementsByClassName("ai_answer")[0];
-        var ai_input = document.getElementById('ai-answer');
-        ai_input.value = data["best_span_str"];
-        return;
-    });
-}
-
-function error_response() {
-    //document.getElementById("ai-answer").value = "Error while fetching AI answer"
-    document.getElementById("ai-answer").value = "AI is thinking ...";
 }
 
 function invoke_bidaf_with_retries(n) {
@@ -777,21 +600,62 @@ function invoke_bidaf_with_retries(n) {
     });
 }
 
-function error_passages() {
-    passages = get_contents();
-    populate_passage('next');
+function resolve_response(response) {
+    if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+                    response.status);
+        document.getElementById('ai-answer').value = "";
+        return;
+    }
+
+    // Examine the text in the response
+    response.json().then(function(data) {
+        var ai_answer_container = document.getElementsByClassName("ai_answer")[0];
+        var ai_input = document.getElementById('ai-answer');
+        ai_input.value = data["best_span_str"];
+        return;
+    });
+}
+
+function error_response() {
+    document.getElementById("ai-answer").value = "Error while fetching AI answer";
 }
 
 function fetch_passages_with_retries(n) {
     var data_url = "https://s3-us-west-2.amazonaws.com/pradeepd-quoref/data/quoref_passages.json";
     fetch(data_url)
-        .then(parse_passages)
+        .then(parsePassages)
         .catch(function(error) {
             if (n === 1) return reject(error_passages);
             fetch_passages_with_retries(n - 1)
-                .then(parse_passages)
+                .then(parsePassages)
                 .catch(error_passages);
         });
+}
+
+function parsePassages(response) {
+    if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+                    response.status);
+        error_passages();
+        return;
+    }
+
+    response.json().then(function(data) {
+        var all_passages = data["passages"];
+        // Get 3 random passages to show the user.
+        for (var i = 0; i < num_passages; i++) {
+            var idx = Math.floor((Math.random() * all_passages.length) + 1);
+            passages.push(all_passages[idx]);
+            passage_ids[i] = idx;
+        }
+        populate_passage('next');
+    });
+}
+
+function error_passages() {
+    passages = get_contents();
+    populate_passage('next');
 }
 
 // Get all the current spans
@@ -983,26 +847,6 @@ function final_submit() {
 
     document.getElementById("submission").style.display = "";
     document.getElementById("comment").style.display = "";
-}
-
-function parse_passages(response) {
-    if (response.status !== 200) {
-        console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-        error_passages();
-        return;
-    }
-
-    // Examine the text in the response
-    response.json().then(function(data) {
-        var all_passages = data["passages"];
-        for (var i = 0; i < num_passages; i++) {
-            var idx = Math.floor((Math.random() * all_passages.length) + 1);
-            passages.push(all_passages[idx]);
-            passage_ids[i] = idx;
-        }
-        populate_passage('next');
-    });
 }
 
 function getSelectedText() {
