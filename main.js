@@ -17,14 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("passageNum").innerText = "1/" + num_passages;
 });
 
-document.onkeydown = function(event) {
-    // on enter press override to create question
-    if (event.target.tagName != 'TEXTAREA' && event.keyCode == 13) {
-        create_question();
-        return false;
-    }
-}
-
+// TODO(nfliu): ask Pradeep if this is still necessary / how we should change it.
 function get_contents() {
     var passage_data = `Tom falls in love with Becky Thatcher, a new girl in town, and persuades her to get "engaged" by kissing him. But their romance collapses when she learns Tom has been "engaged" previously to Amy Lawrence. Becky cries for a great deal of time until the other students begin to notice, and she becomes embarrassed. Shortly after Becky shuns him, he accompanies Huckleberry Finn to the graveyard at night, where they witness a trio of body snatchers, Dr. Robinson, Muff Potter, and Injun Joe, getting into a fight in which Robinson is murdered by Injun Joe. Tom and Huckleberry Finn swear a blood oath to not tell anyone about the murder, as they feel that if they do, Injun Joe would murder them.
 	Natasha visits the Moscow opera, where she meets Hélène and her brother Anatole. Anatole has since married a Polish woman whom he has abandoned in Poland. He is very attracted to Natasha and determined to seduce her, and conspires with his sister to do so. Anatole succeeds in making Natasha believe he loves her, eventually establishing plans to elope. Natasha writes to Princess Maria, Andrei's sister, breaking off her engagement. At the last moment, Sonya discovers her plans to elope and foils them. Natasha learns from Pierre of Anatole's marriage. Devastated, Natasha makes a suicide attempt and is left seriously ill.
