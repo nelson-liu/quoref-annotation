@@ -303,7 +303,8 @@ function create_question() {
             tab_container.appendChild(new_tab);
             question_num = question_num + 1;
             total_question_cnt = total_question_cnt + 1;
-            document.getElementsByClassName("passage_num")[0].innerText = "Passage: " + (record_count) + "/" + passages.length + " Questions: " + (total_question_cnt);
+            document.getElementById("numQuestionsWritten").innerText = total_question_cnt + "/" + min_questions;
+            document.getElementById("passageNum").innerText = record_count + "/" + passages.length;
             current_question_id = (record_count - 1) + "-" + question_num;
             // else just modify the text
         } else {
@@ -673,7 +674,8 @@ function populate_passage(config) {
         var rect_el = get_elements_by_class_starts_with("horizontal-scroll-wrapper", "div", (record_count - 1) + "-");
         question_num = rect_el.length;
 
-        document.getElementsByClassName("passage_num")[0].innerText = "Passage: " + (record_count) + "/" + passages.length + " Questions: " + (total_question_cnt);
+        document.getElementById("numQuestionsWritten").innerText = total_question_cnt + "/" + min_questions;
+        document.getElementById("passageNum").innerText = record_count + "/" + passages.length;
         var new_passage = document.createElement("div");
         new_passage.innerText = passages[record_count - 1];
         new_passage.className = "passage-" + record_count;

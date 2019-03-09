@@ -220,63 +220,83 @@
                     </div>
                 </div>
 
-                <div class="passage_num">
-                </div>
-                <br />
-                <div class="panel">
-                    <div class="left_panel">
-                        <div class="passage">
-                            <h2>Passage</h2>
-                            <div class="passage-0">
-                                <p id="passage-loading"><b>Loading passages...</b></p>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>
+                            Questions Written: <span id="numQuestionsWritten"></span>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card sticky-top">
+                                        <div class="card-header">
+                                            <h2>
+                                                Passage <span id="passageNum"></span>
+                                            </h2>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-text">
+                                                <div class="passage">
+                                                    <div class="passage-0">
+                                                        <strong>Loading passages...</strong>
+                                                        <div class="spinner-border" role="status">
+                                                            <span class="sr-only"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <h2>Type a question based on the passage below</h2>
+                                    <div class="question">
+                                        <input type="text" class="form-control" id="input-question" placeholder="Write a question here!" onkeyup="initialize_answer();">
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col">
+                                            <h4>Your Answer</h4>
+                                            <table id="ans_table">
+                                                <tr id="span_row">
+                                                    <td>
+                                                        <input type="radio" name="answer" id="span" value='span' onchange="return add_span(this);">Highlight the answer(s)
+                                                    </td>
+                                                </tr>
+                                                <tr id="no_answer_row">
+                                                    <td>
+                                                        <input type="radio" name="answer" id="no_answer" value='no_answer' onchange="run_validations_no_answer();">No answer
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="col">
+                                            <h4>AI predicted the answer below <br />(wait for answer to appear below)</h4>
+                                            <div class="ai_answer" align="center">
+                                                <textarea id="ai-answer" type="text" readonly>
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="wrapper-outer">
+                                        <div class="horizontal-scroll-wrapper">
+                                        </div>
+                                        <br />
+                                        <div id="bottomrow">
+                                            <button id="next_question" type="button" class="btn-submit" onclick="create_question();">
+                                                Add Question
+                                            </button>
+                                            <div id="error_panel">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="right_panel">
-                        <h2>Type a question based on the passage below</h2>
-                        <div class="question">
-                            <input type="text" id="input-question" onkeyup="initialize_answer();">
-                        </div>
-                        <div id="wrapper-outer">
-                            <div id="wrapper">
-                                <div id="leftcolumn">
-                                    <div class="answer" align="center">
-                                        <h4>Your Answer</h4>
-                                        <table id="ans_table">
-                                            <tr id="span_row">
-                                                <td>
-                                                    <input type="radio" name="answer" id="span" value='span' onchange="return add_span(this);">Highlight the answer(s)
-                                                </td>
-                                            </tr>
-                                            <tr id="no_answer_row">
-                                                <td>
-                                                    <input type="radio" name="answer" id="no_answer" value='no_answer' onchange="run_validations_no_answer();">No answer
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div id="rightcolumn">
-                                    <h4>AI predicted the answer below <br />(wait for answer to appear below)</h4>
-                                    <div class="ai_answer" align="center">
-                                        <textarea id="ai-answer" type="text" readonly>
-                                        </textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="horizontal-scroll-wrapper">
-                            </div>
-                            <br />
-                            <div id="bottomrow">
-                                <button id="next_question" type="button" class="btn-submit" onclick="create_question();">
-                                    Add Question
-                                </button>
-                                <div id="error_panel">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
+                <br/>
                 <div class="bottom_panel">
                     <button id="ready_submit" type="button" class="btn" onclick="final_submit()" onmouseover="check_question_count();">
                         Ready to Submit HIT

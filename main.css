@@ -3,30 +3,6 @@
     box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
 }
 
-* {
-    font-family: 'Source Sans Pro', sans-serif;
-    color: #232323;
-    box-sizing: border-box
-}
-
-body,
-html {
-    min-width: 48em;
-    background: #f9fafc;
-    font-size: 16px
-}
-
-.passage {
-    float: left;
-    font-size: 15px;
-    margin-left: 1.5em;
-
-}
-
-.highlight_span {
-    color: darkred;
-}
-
 #ai-answer {
     background-color: lightcoral;
     /*#D2B4DE;*/
@@ -44,39 +20,6 @@ html {
     overflow: auto;
 }
 
-.question {
-    line-height: 2em;
-    font-size: 2em;
-    width: 100%;
-}
-
-.panel {
-    background-color: #f1f1f1;
-    min-height: 500px;
-    border: 5px solid #ccc;
-    display: flex;
-}
-
-.left_panel {
-    float: left;
-    background-color: #f1f1f1;
-    width: 45%;
-
-}
-
-.right_panel {
-    float: left;
-    padding: 0px 12px;
-    background-color: #d1e0e0;
-    width: 55%;
-
-}
-
-.right_panel_sample {
-    float: left;
-    padding: 0px 0px;
-    width: 55%;
-}
 
 .bottom_panel {
     float: right;
@@ -90,35 +33,6 @@ html {
     font-size: 14px;
     font-weight: bold
 }
-
-/*.horizontal-scroll-wrapper {
-    display: grid;
-    max-width: 800px;
-    min-height: 50px;
-    /*white-space: nowrap;
-    overflow: auto;
-    display: flex;
-}
-
-.rectangles {
-    min-width: 140px;
-    height: 40px;
-    background-color: #cab;
-    margin: 5px;
-    font-size: 11px;
-    word-wrap: break-word;
-    display: inline-block;
-}
-
-.rectangles:hover {
-    border: solid darkred;
-}
-
-.horizontal-scroll-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 10px;
-}*/
 
 .horizontal-scroll-wrapper>div {
     border: 2px solid #ffa94d;
@@ -135,7 +49,6 @@ html {
 }
 
 .rectangles {
-
     min-height: 50px;
     font-size: 12px;
     background-color: #cab;
@@ -398,34 +311,14 @@ select {
     -moz-box-sizing: border-box;
 }
 
-.passage_num {
-    text-align: center;
-    color: gray;
-    font-size: 16px
-}
-
 .query:hover {
     border: solid 2px darkred;
-}
-
-a {
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-    font-weight: bold;
-    color: blue;
 }
 
 #ready_submit {
     height: 50px;
     min-width: 100px;
     background: darkgray;
-}
-
-::placeholder {
-    font-size: 17px;
 }
 
 #comment {
@@ -440,10 +333,4 @@ a:hover {
 
 #submission_container {
     margin-left: 45%
-}
-
-#ms-span {
-    font-weight: bold;
-    color: seagreen;
-    background-color: yellow;
 }
