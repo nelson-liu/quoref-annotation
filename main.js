@@ -313,7 +313,7 @@ function run_validations_no_answer() {
 
     var aiAnswer = document.getElementById('ai-answer').innerText;
     if ($.trim(aiAnswer) === "!!NO ANSWER!!") {
-        $("#error_panel").text("This question is too easy for the AI, it was able to correctly answer.");
+        $("#error_panel").text("The question is too easy. The AI system correctly answers it.");
         $("#add_span").prop("disabled", true);
         $("#next_question").prop("disabled", true);
         return false;
@@ -346,7 +346,7 @@ function run_validations_span() {
         return false;
     }
     if (isAnswerSameAsAIAnswer()) {
-        $("#error_panel").text("This question is too easy for the AI, it was able to correctly answer.");
+        $("#error_panel").text("The question is too easy. The AI system correctly answers it.");
         $("#add_span").prop("disabled", true);
         $("#next_question").prop("disabled", true);
         return false;
