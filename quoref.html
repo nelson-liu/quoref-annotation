@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
         <title>Smart Question Answering</title>
         <link href="main.css" rel="stylesheet" />
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -16,7 +15,6 @@
         <script src="main.js"></script>
         <script src="sample-span-highlight.js"></script>
     </head>
-
     <body>
         <form name='mturk_form' method='post' id='mturk_form' action='https://www.mturk.com/mturk/externalSubmit'>
             <input type='hidden' value='' name='assignmentId' id='assignmentId' />
@@ -31,10 +29,10 @@
                             <div id="collapseInstructions" class="collapse show">
                                 <div class="card-body">
                                     <p class="card-text">
-			                                  <b>This is a pilot annotation task, and we are still trying to assess its feasibility. Once we get an understanding of
-			                                      how difficult this task is, we will update the pay rate accordingly, and will add more HITs. Your feedback will greatly help us in this process.
-			                                      So please remember to use the feedback box at the bottom of this page to let us know what you think!</b>
-			                              </p>
+                                        <b>This is a pilot annotation task, and we are still trying to assess its feasibility. Once we get an understanding of
+                                            how difficult this task is, we will update the pay rate accordingly, and will add more HITs. Your feedback will greatly help us in this process.
+                                            So please remember to use the feedback box at the bottom of this page to let us know what you think!</b>
+                                    </p>
                                     <p class="card-text">
                                         In this task, you will look at paragraphs that contain several phrases that are references to names of
                                         people, places, or things. You will notice that multiple phrases often refer to the same person, place, or thing.
@@ -84,7 +82,7 @@
                                                             <span class="sample-span" id="span9b">Oliver</span> unwittingly falls in with <span class="sample-span" id="span9d">an infamous Jewish criminal</span> known as <span class="sample-span" id="span9d">Fagin</span>, <span class="sample-span" id="span9d">the gentleman</span>
                                                             of whom <span class="sample-span" id="span9c">the Artful Dodger</span> spoke. Ensnared, <span class="sample-span" id="span9b">Oliver</span> lives with <span class="sample-span" id="span9d">Fagin</span> and <span class="sample-span" id="span9d">his</span> gang of juvenile
                                                             pickpockets in <span class="sample-span" id="span7b"><span class="sample-span" id="span6a">their lair</span></span> at Saffron Hill for some time, unaware
-                                                                of their criminal occupations. <span class="sample-span" id="span9b"><span class="sample-span" id="span1a">He</span></span> believes they make wallets and handkerchiefs.
+                                                            of their criminal occupations. <span class="sample-span" id="span9b"><span class="sample-span" id="span1a">He</span></span> believes they make wallets and handkerchiefs.
                                                         </div>
                                                     </div>
                                                 </div>
@@ -202,32 +200,33 @@
                         <h2>Let's start writing some questions now!</h2>
                         <h4>Please keep in mind the following:</h4>
                         <ol>
-			                      <li> For each of your questions, if an answer exists, it should be one or more phrases in the paragraph.
-				                        If not, please select “NO ANSWER”. </li>
-			                      <li> The answer for each question, if one exists in the paragraph, should be unambiguous. Please avoid
-				                        questions that can have more than one answers. </li>
-			                      <li> There is an AI system running in the background, what will try to answer your question as
-				                        soon as you are done typing. It is reasonably smart, and can answer relatively simple questions. But we are interested
-		    		                    in those questions that it is not smart enough to answer. If the system's answer is correct, please ask it another question. After you
-		    		                    find a question that it cannot answer correctly, please also select the correct answer from the paragraph by highlighting with your mouse.
-			                      </li>
+                            <li> For each of your questions, if an answer exists, it should be one or more phrases in the paragraph.
+                                If not, please select “NO ANSWER”. 
+                            </li>
+                            <li> The answer for each question, if one exists in the paragraph, should be unambiguous. Please avoid
+                                questions that can have more than one answers. 
+                            </li>
+                            <li> There is an AI system running in the background, what will try to answer your question as
+                                soon as you are done typing. It is reasonably smart, and can answer relatively simple questions. But we are interested
+                                in those questions that it is not smart enough to answer. If the system's answer is correct, please ask it another question. After you
+                                find a question that it cannot answer correctly, please also select the correct answer from the paragraph by highlighting with your mouse.
+                            </li>
                             <li>
-						                    Note that there are questions for which there are multiple answers are particularly difficult for the AI system. You may want to ask as many such questions as possible.
-						                    For providing multiple spans as answers, you can click on the "Add Another Answer" button under the last answer box. To remove previously added spans, you can click on the "Delete Answer"
-						                    buttons next to the answer boxes.
-					                  </li>
-			                      <li> Once you add a question, it appears below the answer area. If you are unhappy with a question you added, you can edit it by clicking on it. </li>
-			                      <li> You have <b>3 passages</b> to pick from, and over these three passages, you must create <b>at least 12 questions</b> to submit the HIT.
-                    	      </li>
-                    	      <li> You can go back and forth between the passages. Some passages are easier to generate questions from than
-				                        others, so if you have a hard time, move to a different passage.
-                    	      </li>
-                    	      <li> If the "ADD QUESTION" or "READY TO SUBMIT HIT" buttons are not active, hover your mouse on them to know the reason.
-                    	      </li>
+                                Note that there are questions for which there are multiple answers are particularly difficult for the AI system. You may want to ask as many such questions as possible.
+                                For providing multiple spans as answers, you can click on the "Add Another Answer" button under the last answer box. To remove previously added spans, you can click on the "Delete Answer"
+                                buttons next to the answer boxes.
+                            </li>
+                            <li> Once you add a question, it appears below the answer area. If you are unhappy with a question you added, you can edit it by clicking on it. </li>
+                            <li> You have <b>3 passages</b> to pick from, and over these three passages, you must create <b>at least 12 questions</b> to submit the HIT.
+                            </li>
+                            <li> You can go back and forth between the passages. Some passages are easier to generate questions from than
+                                others, so if you have a hard time, move to a different passage.
+                            </li>
+                            <li> If the "ADD QUESTION" or "READY TO SUBMIT HIT" buttons are not active, hover your mouse on them to know the reason.
+                            </li>
                         </ol>
                     </div>
                 </div>
-
                 <div class="card mb-4">
                     <div class="card-header">
                         <h3>
@@ -257,42 +256,48 @@
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="row">
-                                        <h2>Write a question about the passage</h2>
-                                        <input type="text" class="form-control" id="input-question" placeholder="Write a question here!" onkeyup="getAIAnswer();">
-                                    </div>
-                                    <div class="row mt-4">
-                                        <div class="col">
-                                            <h4>Your Answer</h4>
-                                            <div class="radio">
-                                                <label><input type="radio" name="answer" id="span_answer" value='span' onchange="return initializeSpanAnswer();"> Highlight the answer(s)</label>
-                                            </div>
-                                            <div class="radio">
-                                                <label><input type="radio" name="answer" id="no_answer" value='no_answer' onchange="run_validations_no_answer();">No answer</label>
-                                            </div>
-                                            <div id="answersWritten">
-                                            </div>
-                                            <button type="button" id="add_span" class="btn btn-primary mt-2" onclick="return addSpan();" disabled style="display:none">
-                                                Add Another Answer
-                                            </button>
-                                            <div id="error_panel">
-                                            </div>
-                                            <button type="button" id="next_question" class="btn btn-primary mt-4" disabled onclick="create_question();">
-                                                Add Question
-                                            </button>
-                                        </div>
-                                        <div class="col">
-                                            <h4>AI predicted:<br />(wait for answer to appear below)</h4>
-                                            <div class="card bg-light">
-                                                <div class="card-body">
-                                                    <samp id="ai-answer"></samp>
+                                    <div class="card sticky-top">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h2>Write a question about the passage</h2>
+                                                    <input type="text" class="form-control" id="input-question" placeholder="Write a question here!" onkeyup="getAIAnswer();">
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col" id="questionsWritten">
-                                            <h3>Questions written for this passage:</h3>
+                                            <div class="row mt-4">
+                                                <div class="col">
+                                                    <h4>Your Answer</h4>
+                                                    <div class="radio">
+                                                        <label><input type="radio" name="answer" id="span_answer" value='span' onchange="return initializeSpanAnswer();"> Highlight the answer(s)</label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label><input type="radio" name="answer" id="no_answer" value='no_answer' onchange="run_validations_no_answer();">No answer</label>
+                                                    </div>
+                                                    <div id="answersWritten">
+                                                    </div>
+                                                    <button type="button" id="add_span" class="btn btn-primary mt-2" onclick="return addSpan();" disabled style="display:none">
+                                                        Add Another Answer
+                                                    </button>
+                                                    <div id="error_panel">
+                                                    </div>
+                                                    <button type="button" id="next_question" class="btn btn-primary mt-4" disabled onclick="create_question();">
+                                                        Add Question
+                                                    </button>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>AI predicted:<br />(wait for answer to appear below)</h4>
+                                                    <div class="card bg-light">
+                                                        <div class="card-body">
+                                                            <samp id="ai-answer"></samp>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col" id="questionsWritten">
+                                                    <h3>Questions written for this passage:</h3>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -305,11 +310,9 @@
                         <button id="ready_submit" type="button" class="btn btn-secondary" onclick="final_submit()" onmouseover="check_question_count();" disabled>
                             Ready to Submit HIT
                         </button>
-
                         <button id="prev_passage" type="button" class="btn btn-primary" onclick="previousPassage();">
                             Previous Passage
                         </button>
-
                         <button id="next_passage" type="button" class="btn btn-primary" onclick="nextPassage();">
                             Next Passage
                         </button>
