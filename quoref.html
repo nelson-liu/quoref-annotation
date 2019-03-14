@@ -9,12 +9,12 @@
 
         <title>Smart Question Answering</title>
         <link href="main.css" rel="stylesheet" />
-        <script src="main.js"></script>
-        <script src="sample-span-highlight.js"></script>
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="main.js"></script>
+        <script src="sample-span-highlight.js"></script>
     </head>
 
     <body>
@@ -70,7 +70,7 @@
                                                         <h2>Passage</h2>
                                                     </div>
                                                     <div class="card-body">
-                                                        <div class="passage-sample card-text">
+                                                        <div id="passage-sample" class="card-text">
                                                             Nearing London, <span class="sample-span" id="span9b"><span class="sample-span" id="span1b">Oliver</span></span> encounters <span class="sample-span" id="span9c"><span class="sample-span" id="span34b">Jack
                                                             Dawkins</span></span>, <span class="sample-span" id="span9c">a pickpocket</span> more commonly known by the nickname
                                                             <span class="sample-span" id="span9c"><span class="sample-span" id="span2b">the "Artful Dodger"</span></span>, and <span class="sample-span" id="span9a"><span class="sample-span" id="span9c"><span class="sample-span" id="span2a">his</span></span>
@@ -221,7 +221,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-header">
                         <h3>
                             Questions Written: <span id="numQuestionsWritten"></span>
@@ -239,12 +239,10 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="card-text">
-                                                <div class="passage">
-                                                    <div class="passage-0">
-                                                        <strong>Loading passages...</strong>
-                                                        <div class="spinner-border" role="status">
-                                                            <span class="sr-only"></span>
-                                                        </div>
+                                                <div id="passage" onmouseup="getPassageSelectionIndices(); return false;">
+                                                    <strong>Loading passages...</strong>
+                                                    <div class="spinner-border" role="status">
+                                                        <span class="sr-only"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -259,19 +257,20 @@
                                     <div class="row mt-4">
                                         <div class="col">
                                             <h4>Your Answer</h4>
-                                            <table id="ans_table">
-                                                <tr id="span_row">
-                                                    <td>
-                                                        <input type="radio" name="answer" id="span" value='span' onchange="return add_span(this);">Highlight the answer(s)
-                                                    </td>
-                                                </tr>
-                                                <tr id="no_answer_row">
-                                                    <td>
-                                                        <input type="radio" name="answer" id="no_answer" value='no_answer' onchange="run_validations_no_answer();">No answer
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <button type="button" id="next_question" class="btn btn-primary mt-4" onclick="create_question();">
+                                            <div class="radio">
+                                                <label><input type="radio" name="answer" id="span_answer" value='span' onchange="return initializeSpanAnswer();"> Highlight the answer(s)</label>
+                                            </div>
+                                            <div class="radio">
+                                                <label><input type="radio" name="answer" id="no_answer" value='no_answer' onchange="run_validations_no_answer();">No answer</label>
+                                            </div>
+                                            <div id="answersWritten">
+                                            </div>
+                                            <button type="button" id="add_span" class="btn btn-primary mt-2" onclick="return addSpan();" disabled style="display:none">
+                                                Add Another Answer
+                                            </button>
+                                            <div id="error_panel">
+                                            </div>
+                                            <button type="button" id="next_question" class="btn btn-primary mt-4" disabled onclick="create_question();">
                                                 Add Question
                                             </button>
                                         </div>
@@ -284,65 +283,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="horizontal-scroll-wrapper">
-                                    </div>
-                                    <br />
-                                    <div class="row">
-                                        <div class="col">
-                                            <div id="error_panel">
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="row">
                                         <div class="col" id="questionsWritten">
                                             <h3>Questions written:</h3>
-                                            <div class="card mt-2">
-                                                <div class="card-body">
-                                                    <p>This is some text within a card body.</p>
-                                                    <button class="btn btn-primary mr-2">Edit</a>
-                                                    <button class="btn btn-danger">Delete</a>
-                                                </div>
-                                            </div>
-                                            <div class="card mt-2">
-                                                <div class="card-body">
-                                                    This is some text within a card body.
-                                                </div>
-                                            </div>
-                                            <div class="card mt-2">
-                                                <div class="card-body">
-                                                    This is some text within a card body.
-                                                </div>
-                                            </div>
-                                            <div class="card mt-2">
-                                                <div class="card-body">
-                                                    This is some text within a card body.
-                                                </div>
-                                            </div>
-                                            <div class="card mt-2">
-                                                <div class="card-body">
-                                                    This is some text within a card body.
-                                                </div>
-                                            </div>
-                                            <div class="card mt-2">
-                                                <div class="card-body">
-                                                    This is some text within a card body.
-                                                </div>
-                                            </div>
-                                            <div class="card mt-2">
-                                                <div class="card-body">
-                                                    This is some text within a card body.
-                                                </div>
-                                            </div>
-                                            <div class="card mt-2">
-                                                <div class="card-body">
-                                                    This is some text within a card body.
-                                                </div>
-                                            </div>
-                                            <div class="card mt-2">
-                                                <div class="card-body">
-                                                    This is some text within a card body.
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -350,40 +293,45 @@
                         </div>
                     </div>
                 </div>
-                <br/>
-                <div class="bottom_panel">
-                    <button id="ready_submit" type="button" class="btn btn-primary" onclick="final_submit()" onmouseover="check_question_count();">
-                        Ready to Submit HIT
-                    </button>
+                <div class="row mb-4">
+                    <div class="col text-center">
+                        <button id="ready_submit" type="button" class="btn btn-secondary" onclick="final_submit()" onmouseover="check_question_count();" disabled>
+                            Ready to Submit HIT
+                        </button>
 
-                    <button id="prev_passage" type="button" class="btn btn-primary" onclick="populate_passage('previous');">
-                        Previous Passage
-                    </button>
+                        <button id="prev_passage" type="button" class="btn btn-primary" onclick="previousPassage();">
+                            Previous Passage
+                        </button>
 
-                    <button id="next_passage" type="button" class="btn btn-primary" onclick="populate_passage('next');">
-                        Next Passage
-                    </button>
-
+                        <button id="next_passage" type="button" class="btn btn-primary" onclick="nextPassage();">
+                            Next Passage
+                        </button>
+                    </div>
                 </div>
+                <div class="row mb-4 text-center" id="submission_container" style="display:none">
+                    <div class="col">
+                        <h2>Thank you for helping our research!</h2>
+                        <input type='submit' class="btn btn-success" id='submitButton' disabled value='Submit HIT'>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h3>
+                                    Please leave your feedback here
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="comment">
+                                    <textarea class="form-control" rows="10" type="text" id="feedback" placeholder="Please leave your feedback here."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input id="generated_answers" type="hidden">
             </div>
-            <br />
-            <br />
-            <div id="comment">
-                <textarea type="text" name="feedback" id="feedback" rows="10" cols="20" placeholder="Please leave your feedback here."></textarea>
-            </div>
-
-            <div id="generated_answers">
-            </div>
-
-            <div id="submission" style="display:none">
-                <h2>Thank you for helping our research!</h2>
-            </div>
-            <br />
-
-            <div id="submission_container">
-                <!--<input type='submit' class="btn" id='submitButton' disabled value='Submit HIT' style="display:none;margin-left:45%" />-->
-            </div>
-
         </form>
         <script language='Javascript'>
          turkSetAssignmentID();
