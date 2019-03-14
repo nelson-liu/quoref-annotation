@@ -3,6 +3,8 @@ import sys
 import csv
 import json
 
+import ftfy
+
 argparser = argparse.ArgumentParser("Take summaries from NarrativeQA, and truncate "
                                     "them until a paragraph boundary, such that there "
                                     "are at most 3000 characters in the passage.")
