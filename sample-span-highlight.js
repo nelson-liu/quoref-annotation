@@ -39,8 +39,8 @@ function highlight_q6() {
 }
 
 function highlight_q7() {
-    document.getElementById("span6a").classList.add("highlighted");
-    document.getElementById("span6b").classList.add("highlighted");
+    document.getElementById("span7a").classList.add("highlighted");
+    document.getElementById("span7b").classList.add("highlighted");
 }
 
 function highlight_q9() {
