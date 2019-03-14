@@ -299,14 +299,12 @@ function run_validations_no_answer() {
 
     if (isQuestionEmpty()) {
         $("#error_panel").text("The question is empty.");
-        $("#add_span").prop("disabled", true);
         $("#next_question").prop("disabled", true);
         return false;
     }
 
     if (isQuestionDuplicate()) {
         $("#error_panel").text("This question is the same as an existing one.");
-        $("#add_span").prop("disabled", true);
         $("#next_question").prop("disabled", true);
         return false;
     }
@@ -314,13 +312,11 @@ function run_validations_no_answer() {
     var aiAnswer = document.getElementById('ai-answer').innerText;
     if ($.trim(aiAnswer) === "!!NO ANSWER!!") {
         $("#error_panel").text("The question is too easy. The AI system correctly answers it.");
-        $("#add_span").prop("disabled", true);
         $("#next_question").prop("disabled", true);
         return false;
     }
     // Enable submitting the question.
     $("#error_panel").text("");
-    $("#add_span").prop("disabled", false);
     $("#next_question").prop("disabled", false);
     return true;
 }
