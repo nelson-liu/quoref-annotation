@@ -569,7 +569,7 @@ function check_question_count() {
         }
     } else {
         // Button is enabled
-        $("#ready_submit").prop("disabled", true);
+        $("#ready_submit").prop("disabled", false);
         // Remove btn-secondary if it exists
         if ($("#ready_submit").hasClass("btn-secondary")){
             $("#ready_submit").removeClass("btn-secondary");
