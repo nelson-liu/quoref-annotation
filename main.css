@@ -59,69 +59,69 @@
     display: inline;
 }
 
-#span1a.highlighted {
+.span1a.highlighted {
     background-color: lightblue
 }
 
-#span1b.highlighted {
+.span1b.highlighted {
     background-color: lightgreen
 }
 
-#span2a.highlighted {
+.span2a.highlighted {
     background-color: lightblue
 }
 
-#span2b.highlighted {
+.span2b.highlighted {
     background-color: lightgreen
 }
 
-#span3a.highlighted {
+.span3a.highlighted {
     background-color: lightblue
 }
 
-#span34b.highlighted {
+.span34b.highlighted {
     background-color: lightgreen
 }
 
-#span3c.highlighted {
+.span3c.highlighted {
     background-color: lightgreen
 }
 
 
-#span4a.highlighted {
+.span4a.highlighted {
     background-color: lightblue
 }
 
-#span6a.highlighted {
+.span6a.highlighted {
     background-color: lightblue
 }
 
 
-#span6b.highlighted {
+.span6b.highlighted {
     background-color: lightgreen
 }
 
-#span7a.highlighted {
+.span7a.highlighted {
     background-color: lightblue
 }
 
-#span7b.highlighted {
+.span7b.highlighted {
     background-color: lightgreen
 }
 
-#span9a.highlighted {
+.span9a.highlighted {
     background-color: lightgreen
 }
 
-#span9b.highlighted {
+.span9b.highlighted {
     background-color: yellow
 }
 
-#span9c.highlighted {
+.span9c.highlighted {
     background-color: pink
 }
 
-#span9d.highlighted {
+.span9d.highlighted {
     background-color: orange
 }
 
