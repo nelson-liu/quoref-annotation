@@ -155,3 +155,7 @@ select {
 #answersWritten p.card-text {
     margin-bottom: 0.25rem
 }
+
+.btn.btn-primary[disabled] {
+    background-color: #6c757d;
+}
