@@ -343,7 +343,7 @@ function run_validations_span() {
     }
     if (isAnswerSameAsAIAnswer()) {
         $("#error_panel").text("The question is too easy. The AI system correctly answers it.");
-        $("#add_span").prop("disabled", true);
+        $("#add_span").prop("disabled", false);
         $("#next_question").prop("disabled", true);
         return false;
     }
