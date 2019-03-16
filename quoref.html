@@ -261,14 +261,14 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <h2>Write a question about the passage</h2>
-                                                    <input type="text" class="form-control" id="input-question" placeholder="Write a question here!" onkeyup="getAIAnswer();">
+                                                    <input type="text" class="form-control" id="input-question" name="input-question" placeholder="Write a question here!" onkeyup="getAIAnswer();">
                                                 </div>
                                             </div>
                                             <div class="row mt-4">
                                                 <div class="col">
                                                     <h4>Your Answer</h4>
                                                     <div class="radio">
-                                                        <label><input type="radio" name="answer" id="span_answer" value='span' onchange="return initializeSpanAnswer();"> Highlight the answer(s)</label>
+                                                        <label><input type="radio" name="answer" id="span_answer" name="span_answer" value='span' onchange="return initializeSpanAnswer();"> Highlight the answer(s)</label>
                                                     </div>
                                                     <div class="radio">
                                                         <label><input type="radio" name="answer" id="no_answer" value='no_answer' onchange="run_validations_no_answer();">No answer</label>
@@ -321,7 +321,7 @@
                 <div class="row mb-4 text-center" id="submission_container" style="display:none">
                     <div class="col">
                         <h2>Thank you for helping our research!</h2>
-                        <input type='submit' class="btn btn-success" id='submitButton' disabled value='Submit HIT'>
+                        <input type='submit' class="btn btn-success" id='submitButton' name="submitButton" disabled value='Submit HIT'>
                     </div>
                 </div>
                 <div class="row">
@@ -340,7 +340,7 @@
                         </div>
                     </div>
                 </div>
-                <input id="generated_answers" type="hidden">
+                <input id="generated_answers" name="generated_answers" type="hidden">
             </div>
         </form>
         <script language='Javascript'>
