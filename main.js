@@ -1,5 +1,7 @@
 // Minimum number of questions to write.
-var MIN_QUESTIONS = 12;
+var MIN_QUESTIONS = 10;
+// Minimum number of counting questions to write.
+var MIN_COUNT_QUESTIONS = 1;
 // The number of passages available to the user.
 var NUM_PASSAGES = 3;
 
@@ -10,6 +12,8 @@ var editing_question = null;
 var currentPassageIndex = 0;
 // Keeps track of the total number of questions written.
 var total_question_cnt = 0;
+// Keeps track of questions that involve counting.
+var counting_question_cnt = 0;
 // Keeps track of the number of questions written per passage
 var question_num = {};
 // An array of passages that the user is writing questions about.
@@ -24,6 +28,7 @@ var global_timeout = null;
 document.addEventListener("DOMContentLoaded", function() {
     // Initialize question and passage counters
     $('#numQuestionsWritten').text("0/" + MIN_QUESTIONS);
+    $('#countQuestionsWritten').text("0/" + MIN_COUNT_QUESTIONS);
     $('#passageNum').text("1/" + NUM_PASSAGES);
     // Fetch and load passages
     fetchPassagesWithRetries(3);
@@ -69,6 +74,12 @@ function deselect_span() {
     $("#error_panel").text("");
 }
 
+function question_has_count_words(question) {
+    return question.includes("least") || question.includes("most") || question.includes("once") ||
+             question.includes("twice") || question.includes("thrice") || question.includes("times");
+}
+
+
 function deleteQuestion(question_to_delete) {
     // Get the card of the question to edit
     var question_card_to_delete = question_to_delete.parentElement.parentElement;
@@ -77,6 +88,8 @@ function deleteQuestion(question_to_delete) {
 
     // Delete the question card and remove its annotation
     question_card_to_delete.remove();
+    // Keeping track of question text to handle counting questions count.
+    var question_text = annotations[question_card_to_delete_id].question;
     delete annotations[question_card_to_delete_id];
 
     // Decrement the id of questions answers with IDs higher than the one to delete.
@@ -89,6 +102,13 @@ function deleteQuestion(question_to_delete) {
         annotations[currentPassageIndex + "-question-" + (i-1)] = annotations[currentPassageIndex + "-question-" + i];
         delete annotations[currentPassageIndex + "-question-" + i];
     }
+    total_question_cnt -= 1;
+    question_num[currentPassageIndex] -= 1;
+    $("#numQuestionsWritten").text(total_question_cnt + "/" + MIN_QUESTIONS);
+    if (question_has_count_words(question_text)) {
+        counting_question_cnt -= 1;
+    }
+    $("#countQuestionsWritten").text(counting_question_cnt + "/" + MIN_COUNT_QUESTIONS);
 }
 
 // Edit an already added QA pair
@@ -102,42 +122,42 @@ function modify_previous_question(question_to_edit) {
     editing_question = editing_question_card.id;
 
     var editing_question_annotation = annotations[editing_question];
+    var question_text = editing_question_annotation.question;
 
-    if (editing_question_annotation.answer.type == "span") {
-        $("#span_answer").prop('checked', true);
+    $("#span_answer").prop('checked', true);
 
-        for (var i = 0; i < editing_question_annotation.answer.spans.length; i++) {
-            if (i == 0) {
-                // Need to call initializeSpanAnswer() on first iteration
-                // to add the "Add Answer" button.
-                initializeSpanAnswer();
-            }
-            else {
-                addSpan();
-            }
-            // Fill in the value of the answer card.
-            $("#answer-" + i + "-text").text(editing_question_annotation.answer.spans[i]);
-            $("#answer-" + i + "-indices").text(editing_question_annotation.answer.indices[i]);
+    for (var i = 0; i < editing_question_annotation.answer.spans.length; i++) {
+        if (i == 0) {
+            // Need to call initializeSpanAnswer() on first iteration
+            // to add the "Add Answer" button.
+            initializeSpanAnswer();
         }
-        // Add an extra blank span at the end, so users don't
-        // accidentally overwrite their last answer by highlighting.
-        addSpan();
+        else {
+           addSpan();
+        }
+        // Fill in the value of the answer card.
+        $("#answer-" + i + "-text").text(editing_question_annotation.answer.spans[i]);
+        $("#answer-" + i + "-indices").text(editing_question_annotation.answer.indices[i]);
     }
-    else if (editing_question_annotation.answer.type == "no_answer") {
-        $("#no_answer").prop('checked', true);
-    }
+    // Add an extra blank span at the end, so users don't
+    // accidentally overwrite their last answer by highlighting.
+    addSpan();
 
     // Fill in the input question box with the the already-written question.
-    $("#input-question").val(editing_question_annotation.question);
+    $("#input-question").val(question_text);
     // Re-run prediction with backend model.
     document.getElementById('ai-answer').innerText = 'AI is thinking ...';
     getAIAnswer();
+    if (question_has_count_words(question_text)) {
+        // We need to decrement the count here since we will add to it in create_question
+        // after editing is done. But we do not change the display of the count here since
+        // it can be done after the editing is complete.
+        counting_question_cnt -= 1; 
+    }
 }
 
 // Gather the annotations into a structured format
 function getAnswerAnnotations() {
-    // "span" or "no_answer"
-    var answerType = "";
     // The spans and indices (string representation) labeled by the user.
     var answerSpans = [];
     var answerIndices = [];
@@ -146,7 +166,6 @@ function getAnswerAnnotations() {
 
     // User provided a span-based answer.
     if (document.getElementById("span_answer").checked) {
-        answerType = "span";
 
         // Get all user-provided answers
         var answersWritten = $('#answersWritten').find('.answerCard');
@@ -161,12 +180,8 @@ function getAnswerAnnotations() {
             }
         }
     }
-    else if (document.getElementById("no_answer").checked) {
-        answerType = "no_answer";
-    }
 
     return {
-        "type": answerType,
         "spans": answerSpans,
         "indices": answerIndices,
         "ai_answer": aiAnswer
@@ -218,6 +233,14 @@ function create_question() {
         var new_tab_id = editing_question;
     }
 
+    // We need to update the count questions counter whether we are editing existing questions,
+    // or adding new ones. If we are editing, and the original question already had count words,
+    // then we would have decremented the count in modify_previous_question. 
+    if (question_has_count_words(annotation.question)) {
+        counting_question_cnt += 1;
+    }
+    $("#countQuestionsWritten").text(counting_question_cnt + "/" + MIN_COUNT_QUESTIONS);
+
     // Modify the text of the question card
     $('#' + new_tab_id + '-text').text(qaText);
 
@@ -238,13 +261,11 @@ function resetAnswerEntry() {
     $("#next_question").text("Add Question");
     $("#next_question").prop("disabled", true);
 
-    // Deselect both radio buttons.
-    $("#no_answer").prop('checked', false);
     deselect_span();
 }
 
 function isQuestionEmpty() {
-    var trimmedQuestion = $.trim($("#input-question"));
+    var trimmedQuestion = $.trim($("#input-question").val());
 
     if (trimmedQuestion.length === 0) {
         return true;
@@ -253,9 +274,14 @@ function isQuestionEmpty() {
 }
 
 function isQuestionDuplicate() {
-    var trimmedQuestion = $.trim($("#input-question"));
+    var trimmedQuestion = $.trim($("#input-question").val());
 
     for (var questionId in annotations) {
+	// If we are editing a question, we need not compare the question with itself.
+	// If we are not editing a question, editing_question will be null anyway.
+        if (questionId == editing_question) {
+            continue; 
+        }
         if (questionId.startsWith(currentPassageIndex)) {
             if ($.trim(annotations[questionId].question) === trimmedQuestion) {
                 return true;
@@ -269,17 +295,22 @@ function isAnswerLong() {
     var answersWritten = $('#answersWritten').find('.answerCard');
     var mostRecentAnswerId = answersWritten[answersWritten.length - 1].id;
     var mostRecentAnswerText = $('#' + mostRecentAnswerId + '-text').text();
-    if ($.trim(mostRecentAnswerText).split(" ").length > 5) {
+    if ($.trim(mostRecentAnswerText).split(" ").length > 10) {
         return true;
     }
     return false;
 }
+
 function isAnswerSameAsAIAnswer() {
     var answersWritten = $('#answersWritten').find('.answerCard');
-    var mostRecentAnswerId = answersWritten[answersWritten.length - 1].id;
-    var mostRecentAnswerText = $('#' + mostRecentAnswerId + '-text').text();
+    if (answersWritten.length > 1) {
+        // Assuming that the adversary returns a single span.
+        return false;
+    }
+    var answerId = answersWritten[0].id;
+    var answerText = $('#' + answerId + '-text').text();
     var aiAnswer = document.getElementById('ai-answer').innerText;
-    if ($.trim(mostRecentAnswerText) === $.trim(aiAnswer)) {
+    if ($.trim(answerText) === $.trim(aiAnswer)) {
         return true;
     }
     return false;
@@ -289,36 +320,6 @@ function validateAnswers() {
     if (document.getElementById("span_answer").checked) {
         run_validations_span();
     }
-    else if (document.getElementById("no_answer").checked) {
-        run_validations_no_answer();
-    }
-}
-
-function run_validations_no_answer() {
-    deselect_span();
-
-    if (isQuestionEmpty()) {
-        $("#error_panel").text("The question is empty.");
-        $("#next_question").prop("disabled", true);
-        return false;
-    }
-
-    if (isQuestionDuplicate()) {
-        $("#error_panel").text("This question is the same as an existing one.");
-        $("#next_question").prop("disabled", true);
-        return false;
-    }
-
-    var aiAnswer = document.getElementById('ai-answer').innerText;
-    if ($.trim(aiAnswer) === "!!NO ANSWER!!") {
-        $("#error_panel").text("The question is too easy. The AI system correctly answers it.");
-        $("#next_question").prop("disabled", true);
-        return false;
-    }
-    // Enable submitting the question.
-    $("#error_panel").text("");
-    $("#next_question").prop("disabled", false);
-    return true;
 }
 
 // Run span checks whenever the predicted answer changes
@@ -366,7 +367,6 @@ function previousPassage() {
 
 // switch between next and previous passages
 function populatePassage(passageIndex) {
-    document.getElementById("ready_submit").onclick = null;
     if (passageIndex < passages.length) {
         // Remove contents of passage box.
         $("#passage").empty();
@@ -548,7 +548,7 @@ function addSpan() {
                                 '</div>');
     // Since we had an answer before, add the delete button to the previous answer
     if (numAnswers >= 1) {
-        $("#answer-" + (numAnswers - 1) + '-body').append('<a href="#" class="card-link text-danger" onclick="delete_span(this); return false;">Delete Answer</a>');
+        $("#answer-" + (numAnswers - 1) + '-body').append('<a href="#" class="card-link text-danger" onclick="delete_span(this); return false;">Delete Span</a>');
     }
     // Reset the error panel
     $("#error_panel").text("");
@@ -556,7 +556,7 @@ function addSpan() {
 }
 
 function check_question_count() {
-    if (total_question_cnt < MIN_QUESTIONS) {
+    if (total_question_cnt < MIN_QUESTIONS || counting_question_cnt < MIN_COUNT_QUESTIONS) {
         // Button is disabled
         $("#ready_submit").prop("disabled", true);
         // Remove btn-success if it exists.
@@ -582,8 +582,8 @@ function check_question_count() {
 }
 
 function final_submit() {
+    annotations['feedback'] = $('#feedback').val();
     var generatedAnswers = $('#generated_answers').val(JSON.stringify(annotations));
-
     $("#submission_container").show();
     var submitButton = $("#submitButton");
     submitButton.prop("disabled", false);

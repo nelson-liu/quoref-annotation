@@ -29,18 +29,24 @@
                             <div id="collapseInstructions" class="collapse show">
                                 <div class="card-body">
                                     <p class="card-text">
-                                        <b>This is a pilot annotation task, and we are still trying to assess its feasibility. Once we get an understanding of
-                                            how difficult this task is, we will update the pay rate accordingly, and will add more HITs. Your feedback will greatly help us in this process.
-                                            So please remember to use the feedback box at the bottom of this page to let us know what you think!</b>
+                                        <b>This is a pilot annotation task. We are still trying to assess its feasibility. Once we get an understanding of how difficult this task is, we will update the pay rate accordingly.
+					    Your feedback will greatly help us in this process. So please remember to use the feedback box at the bottom of this page to let us know what you think!
+					    We will also make note of workers who make good submissions now, and add many more HITs with a generous pay rate for them later.
+					</b>
                                     </p>
                                     <p class="card-text">
                                         In this task, you will look at paragraphs that contain several phrases that are references to names of
-                                        people, places, or things. You will notice that multiple phrases often refer to the same person, place, or thing.
-                                        For example, in the first sentence from sample paragraph below, the names <i>Jack Dawkins</i> and <i>the Artful Dodger</i>
-                                        refer to the same person. Your job is to assess the skills of an AI system at identifying the connection between
-                                        phrases that refer to the same entity. To do so, you will ask it questions that involve applying these skills, and
-                                        <b>find questions that the AI system cannot answer</b>. Here are some kinds of questions you can ask for the
-                                        paragraph below.
+                                        people, places, or things. For example, in the first sentence from sample paragraph below,
+					the names <i>Jack Dawkins</i> and <i>the Artful Dodger</i> refer to the same person, and <i>old gentleman's residence</i>
+					and <i>their lair</i> refer to the same place. You will notice that multiple phrases often refer to the same person, place, or thing.
+                                        Your job is to write questions that you would ask a person to see if they understood that the
+					phrases refer to the same entity. To help you write such questions, we provided some examples of good questions
+					you can ask about such phrases, and bad questions you should avoid. We also want you to avoid questions that can be answered
+					correctly by someone without actually understanding the paragraph. To help you do so, we provided an AI system running in the background
+					that will try to answer the questions you write. You can consider any question it can answer to be too easy. <b>However, please note that
+					the AI system incorrectly answering a question does not necessarily mean that it is good. Please read the examples below carefully to
+					understand what kinds of questions we are interested in.</b>
+					
                                     </p>
                                 </div>
                             </div>
@@ -51,7 +57,7 @@
                     <div class="col">
                         <div class="card">
                             <a class="card-header" data-toggle="collapse" href="#collapseExamples" aria-expanded="true" aria-controls="collapseExamples">
-                                <h3> Examples (click to collapse) </h3>
+                                <h3>Examples of good questions and answers (click to collapse) </h3>
                             </a>
                             <div id="collapseExamples" class="collapse show">
                                 <div class="card-body">
@@ -89,7 +95,7 @@
                                             </div>
                                             <div class="col" id="exampleQuestions">
                                                 <h5>
-                                                    Questions about pronouns (she, her, him, his, their etc.) that refer to people, places, or things
+                                                    Questions that link pronouns (she, her, him, his, their etc.) to people, places, or things to which they refer
                                                 </h5>
                                                 <div class="card mb-2" onmouseover="highlight_q1();" onmouseout="reset_higlight();">
                                                     <div class="card-body">
@@ -122,7 +128,7 @@
                                                 </div>
                                                 <hr>
                                                 <h5>
-                                                    Questions about other references to people, places, or things
+                                                    Questions that link other references to people, places, or things
                                                 </h5>
                                                 <div class="card mb-2" onmouseover="highlight_q4();" onmouseout="reset_higlight();">
                                                     <div class="card-body">
@@ -163,19 +169,6 @@
                                                 </div>
                                                 <hr>
                                                 <h5>
-                                                    Questions like the ones above, except they do not have answers in the paragraph
-                                                </h5>
-                                                <div class="card mb-2">
-                                                    <div class="card-body">
-                                                        <p class="card-text">
-                                                            Question: What is Charley Bates' nickname? <br/>
-                                                            Answer: <b>NO ANSWER</b> <br/>
-                                                            Notes: This question would have had an answer if it were about "Fagin", or "Jack Dawkins", and it would have been in the previous category then.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <h5>
                                                     Questions involving counting the number of times a person, place, or a thing is mentioned
                                                 </h5>
                                                 <div class="card mb-2" onmouseover="highlight_q9();" onmouseout="reset_higlight();">
@@ -197,32 +190,123 @@
                 </div>
                 <div class="row">
                     <div class="col">
+                        <div class="card">
+                            <a class="card-header" data-toggle="collapse" href="#collapseBadExamples" aria-expanded="true" aria-controls="collapseBadExamples">
+                                <h3>Examples of bad questions and answers (click to collapse) </h3>
+                            </a>
+                            <div id="collapseBadExamples" class="collapse show">
+                                <div class="card-body">
+                                    <h5 class="card-text text-center">
+                                        Move your mouse over a question to
+                                        highlight the parts of the passage that
+                                        are relevant to the question.
+                                    </h5>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="card sticky-top">
+                                                    <div class="card-header">
+                                                        <h2>Passage</h2>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div id="passage-sample" class="card-text">
+								In The Tangled Skein, Queen Mary is characterized as a loving woman with a strong sense of justice. The tangled skein arises from Mary's
+								love for the fictional character <span class="sample-span span11b">Robert d'Esclade</span>, <span class="sample-span span11b">fifth Duke of Wessex</span>, said
+								in this book to be the people's choice as King Consort.
+								<span class="sample-span span11b">Wessex</span> is chivalrous and charming, but semi-betrothed to Lady Ursula Glynde, whom <span class="sample-span span11a">he</span> has not seen since her infancy.
+								<span class="sample-span span11b">Wessex</span> is repelled
+								by the idea of having his wife thrust upon him and purposely avoids Lady Ursula. Unknown to <span class="sample-span span11b">Wessex</span>, the
+								Queen jealously guards him
+								against Ursula, who is extremely beautiful. As soon as she realizes the Queen is keeping her away from <span
+									class="sample-span span11b">Wessex</span>, Ursula is angered. She
+								believes she loves <span class="sample-span span11b">Wessex</span>, for his nobility and goodness, and she is invested heavily in the betrothal. <span class="sample-span span10">On her father's deathbed, Ursula
+									promised to go into a convent if she did not marry <span class="sample-span span11b">Wessex</span></span>. Although Ursula does not want to lose her independence by marrying, she seeks
+								to frustrate the Queen's plans and make <span class="sample-span span11b">Wessex</span> notice her; however, the arrival of Cardinal de Moreno, and
+								<span class="sample-span span12a">his henchman</span> <span class="sample-span span12b">Don Mignel</span>,
+								<span class="sample-span span12b">Marquis de Saurez</span>, shifts the scene.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col" id="exampleQuestions">
+                                                <h5>
+                                                    Avoid questions that do not link phrases referring to the same entity
+                                                </h5>
+                                                <div class="card mb-2" onmouseover="highlight_q10();" onmouseout="reset_higlight();">
+                                                    <div class="card-body">
+                                                        <p class="card-text">
+                                                            Bad Question: Who does Ursula promise to? <br/>
+                                                            Answer: <b>her father</b><br/>
+							    Why it is bad: There is only one mention of Ursula's her father in the sentence highlighted. Hence, this question does not require
+							    linking two different phrases that refer to the same entity.<br />
+                                                            Notes: When you write questions, it will be helpful to think about the phrases referring to entities that they link. If you cannot think of
+							    more than one such phrase, it is likely a bad question.
+                                                        </p>
+                                                    </div>
+                                                </div>
+						<hr>
+                                                <h5>
+                                                    Avoid questions that have multiple answers
+                                                </h5>
+                                                <div class="card mb-2" onmouseover="highlight_q11();" onmouseout="reset_higlight();">
+                                                    <div class="card-body">
+                                                        <p class="card-text">
+                                                            Bad Question: Who has not seen Ursula since her infancy? <br/>
+							    Answers: <b>Wessex</b>, <b>Robert d'Esclade</b>, <b>Robert d'Esclade, fifth Duke of Wessex</b><br/>
+							    Why it is bad: The question links "he" (in blue) to the name of that person, but the person is referred to by multiple names (in green), which are all correct answers.<br/>
+                                                            Notes: You can instead ask <i>What is the full name of the person who has not seen Ursula since here infancy?</i>, and the answer would be
+							    <b>Robert d'Esclade</b>.
+                                                        </p>
+                                                    </div>
+                                                </div>
+						<hr>
+                                                <h5>
+                                                    Submit answers with multiple entities as separate spans
+                                                </h5>
+                                                <div class="card mb-2" onmouseover="highlight_q12();" onmouseout="reset_higlight();">
+                                                    <div class="card-body">
+                                                        <p class="card-text">
+                                                            Question: Who are the cardinal's henchmen? <br/>
+							    Bad Answer: <b>Don Mignel, Marquis de Saurez</b> (single selection)<br/>
+							    Good answer: <b>Don Mignel</b>;  <b>Marquis de Saurez</b> (separate selections)<br/>
+                                                            Notes: This question asks for the names of multiple people. Note that this is different from asking for a single person with multiple names
+							    like the previous question. When the answer is names of multiple people, submit them as multiple spans by highlighting each name separately,
+							    and using the "Add Another Span" button to add spans.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <h2>Let's start writing some questions now!</h2>
                         <h4>Please keep in mind the following:</h4>
                         <ol>
-                            <li> For each of your questions, if an answer exists, it should be one or more phrases in the paragraph.
-                                If not, please select “NO ANSWER”. 
+                            <li> For each of your questions the answer should be one or more phrases in the paragraph. 
                             </li>
-                            <li> The answer for each question, if one exists in the paragraph, should be unambiguous. Please avoid
-                                questions that can have more than one answers. 
+                            <li> The answer for each question should be unambiguous. Please avoid questions that can have more than one answers.
                             </li>
-                            <li> There is an AI system running in the background, what will try to answer your question as
-                                soon as you are done typing. It is reasonably smart, and can answer relatively simple questions. But we are interested
-                                in those questions that it is not smart enough to answer. If the system's answer is correct, please ask it another question. After you
-                                find a question that it cannot answer correctly, please also select the correct answer from the paragraph by highlighting with your mouse.
+                            <li> There is an AI system running in the background that will try to answer your question as
+                                soon as you are done typing. If the system's answer is correct, please change your question, as it may be too easy. After you
+                                find a good question, please also select the correct answer from the paragraph by highlighting the relevant spans with your mouse.
                             </li>
                             <li>
-                                Note that there are questions for which there are multiple answers are particularly difficult for the AI system. You may want to ask as many such questions as possible.
-                                For providing multiple spans as answers, you can click on the "Add Another Answer" button under the last answer box. To remove previously added spans, you can click on the "Delete Answer"
-                                buttons next to the answer boxes.
+                                If your answer has multiple spans, you can submit them by clicking on the "Add Another Span" button under the last answer box, and selecting additional spans as
+				appropriate. To remove previously added spans, you can click on the "Delete Span" buttons next to the answer boxes.
                             </li>
-                            <li> Once you add a question, it appears below the answer area. If you are unhappy with a question you added, you can edit it by clicking on it. </li>
-                            <li> You have <b>3 passages</b> to pick from, and over these three passages, you must create <b>at least 12 questions</b> to submit the HIT.
-                            </li>
+                            <li> Once you add a question, it appears below the answer area. If you are unhappy with a question you added, you can edit it or delete it. </li>
+                            <li> You have <b>3 passages</b> to pick from, and over these three passages, you must write <b>at least 10 questions</b> to submit the HIT. Of these, 
+				    <b>at least one question must involve counting entities</b> (like the last example in the good questions above). To check whether a question involves
+				    counting entities, we will look for the presence of any of the following words: "most", "least", "times", "once", "twice", "thrice".
+				    You will see two counters showing the total number of questions submitted so far, and of those that involve counting. </li>
                             <li> You can go back and forth between the passages. Some passages are easier to generate questions from than
                                 others, so if you have a hard time, move to a different passage.
-                            </li>
-                            <li> If the "ADD QUESTION" or "READY TO SUBMIT HIT" buttons are not active, hover your mouse on them to know the reason.
                             </li>
                         </ol>
                     </div>
@@ -230,7 +314,8 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <h3>
-                            Questions Written in HIT: <span id="numQuestionsWritten"></span>
+			    Total Questions Written in HIT: <span id="numQuestionsWritten"></span><br />
+                            Counting Questions Written in HIT: <span id="countQuestionsWritten"></span>
                         </h3>
                     </div>
                     <div class="card-body">
@@ -268,10 +353,7 @@
                                                 <div class="col">
                                                     <h4>Your Answer</h4>
                                                     <div class="radio">
-                                                        <label><input type="radio" name="answer" id="span_answer" name="span_answer" value='span' onchange="return initializeSpanAnswer();"> Highlight the answer(s)</label>
-                                                    </div>
-                                                    <div class="radio">
-                                                        <label><input type="radio" name="answer" id="no_answer" value='no_answer' onchange="run_validations_no_answer();">No answer</label>
+                                                        <label><input type="radio" name="answer" id="span_answer" name="span_answer" value='span' onchange="return initializeSpanAnswer();"> Start highlighting the answer</label>
                                                     </div>
                                                     <div id="answersWritten">
                                                     </div>
@@ -307,21 +389,12 @@
                 </div>
                 <div class="row mb-4">
                     <div class="col text-center">
-                        <button id="ready_submit" type="button" class="btn btn-secondary" onclick="final_submit()" onmouseover="check_question_count();" disabled>
-                            Ready to Submit HIT
-                        </button>
                         <button id="prev_passage" type="button" class="btn btn-primary" onclick="previousPassage();">
                             Previous Passage
                         </button>
                         <button id="next_passage" type="button" class="btn btn-primary" onclick="nextPassage();">
                             Next Passage
                         </button>
-                    </div>
-                </div>
-                <div class="row mb-4 text-center" id="submission_container" style="display:none">
-                    <div class="col">
-                        <h2>Thank you for helping our research!</h2>
-                        <input type='submit' class="btn btn-success" id='submitButton' name="submitButton" disabled value='Submit HIT'>
                     </div>
                 </div>
                 <div class="row">
@@ -334,10 +407,23 @@
                             </div>
                             <div class="card-body">
                                 <div id="comment">
-                                    <textarea class="form-control" rows="10" type="text" id="feedback" placeholder="Please leave your feedback here."></textarea>
+                                    <textarea class="form-control" rows="3" type="text" id="feedback" placeholder="Please leave your feedback here."></textarea>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col text-center">
+                        <button id="ready_submit" type="button" class="btn btn-secondary" onclick="final_submit();" disabled>
+                            Ready to Submit HIT
+                        </button>
+                    </div>
+                </div>
+                <div class="row mb-4 text-center" id="submission_container" style="display:none">
+                    <div class="col">
+                        <h2>Thank you for helping with our research!</h2>
+                        <input type='submit' class="btn btn-success" id='submitButton' name="submitButton" disabled value='Submit HIT'>
                     </div>
                 </div>
                 <input id="generated_answers" name="generated_answers" type="hidden">

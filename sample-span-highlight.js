@@ -49,3 +49,17 @@ function highlight_q9() {
     $(".span9c").addClass("highlighted");
     $(".span9d").addClass("highlighted");
 }
+
+function highlight_q10() {
+    $(".span10").addClass("highlighted");
+}
+
+function highlight_q11() {
+    $(".span11a").addClass("highlighted");
+    $(".span11b").addClass("highlighted");
+}
+
+function highlight_q12() {
+    $(".span12a").addClass("highlighted");
+    $(".span12b").addClass("highlighted");
+}

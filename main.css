@@ -125,6 +125,26 @@
     background-color: orange
 }
 
+.span10.highlighted {
+    background-color: lightblue
+}
+
+.span11a.highlighted {
+    background-color: lightblue
+}
+
+.span11b.highlighted {
+    background-color: lightgreen
+}
+
+.span12a.highlighted {
+    background-color: lightblue
+}
+
+.span12b.highlighted {
+    background-color: lightgreen
+}
+
 .annotated {
     float: left
 }

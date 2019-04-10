@@ -2,6 +2,7 @@ import argparse
 import json
 import sys
 import os
+from collections import defaultdict
 
 import boto3
 import xmltodict
@@ -35,6 +36,7 @@ def main(args):
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
 
+    all_hits_data = []
     for hit in wanted_hits:
         hit_id = hit['HITId']
         worker_results = mturk.list_assignments_for_hit(HITId=hit_id, AssignmentStatuses=['Submitted', 'Approved'])
@@ -44,55 +46,39 @@ def main(args):
 
         if num_submissions > 0:
             for assignment in worker_results['Assignments']:
-                hit_data = {}
+                hit_data = defaultdict(list)
                 xml_doc = xmltodict.parse(assignment['Answer'])
                 worker_id = assignment['WorkerId']
-                worker_id_file = os.path.join(args.output_path, f"{worker_id}.json")
                 if type(xml_doc['QuestionFormAnswers']['Answer']) is list:
                     # Multiple fields in HIT layout
                     for answer_field in xml_doc['QuestionFormAnswers']['Answer']:
                         field_id = answer_field['QuestionIdentifier']
-                        field_value = answer_field['FreeText']
-                        if field_id.startswith('passage-id'):
-                            local_passage_id = field_id.replace('passage-id-', '')
-                            passage = passages[int(field_value)]
-                            hit_data[local_passage_id] = {'passage': passage}
-                        elif field_id.startswith('input-question'):
-                            question_metadata = field_id.replace('input-question-', '').split('-')
-                            local_passage_id, question_id = question_metadata
-                            hit_data[local_passage_id][question_id] = {'question': field_value,
-                                                                       'human-answer': []}
-                        elif field_id.startswith('ai-answer'):
-                            question_metadata = field_id.replace('ai-answer-', '').split('-')
-                            local_passage_id, question_id = question_metadata
-                            hit_data[local_passage_id][question_id]['ai-answer'] = field_value
-                        elif field_id.startswith('span'):
-                            span_metadata = field_id.replace('span-', '').split('-')
-                            if len(span_metadata) == 3:
-                                local_passage_id, question_id, span_id = span_metadata
-                                hit_data[local_passage_id][question_id]['human-answer'].append(field_value)
-                        elif field_id.startswith('null'):
-                            question_metadata = field_id.replace('null-', '').split('-')
-                            local_passage_id, question_id = question_metadata
-                            hit_data[local_passage_id][question_id]['human-answer'].append('NO ANSWER')
-                        elif field_id == 'feedback':
-                            hit_data['feedback'] = field_value
+                        if field_id != "generated_answers":
+                            continue
+                        data = json.loads(answer_field['FreeText'])
+                        for key, value in data.items():
+                            if key == "feedback":
+                                hit_data["feedback"] = value
+                            else:
+                                local_passage_id = key.split('-')[0]
+                                hit_data[local_passage_id].append(value)
+                        # TODO: Handle feedback
 
                 hit_data_with_lists = {'passages': [], 'hit_id': hit_id}
-                for hit_key, hit_value in hit_data.items():
-                    if hit_key == 'feedback':
-                        hit_data_with_lists['feedback'] = hit_value
-                        continue
-                    passage_data = {}
-                    passage_data["passage"] = hit_value["passage"]
-                    passage_data["question_answer_pairs"] = []
-                    for passage_info in hit_value.values():
-                        if isinstance(passage_info, str):
-                            continue
-                        passage_data['question_answer_pairs'].append(passage_info)
-                    hit_data_with_lists['passages'].append(passage_data)
-                with open(worker_id_file, "w") as output_file:
-                    json.dump(hit_data_with_lists, output_file, indent=2)
+                for key, value in hit_data.items():
+                    if key == "feedback":
+                        hit_data_with_lists["feedback"] = value
+                    elif value:
+                        qa_data = value
+                        passage_data = {}
+                        global_passage_id = qa_data[0]['passageID']
+                        passage_data["passage"] = passages[global_passage_id]
+                        passage_data["question_answer_pairs"] = qa_data
+                        hit_data_with_lists['passages'].append(passage_data)
+                all_hits_data.append(hit_data_with_lists)
+    output_file = os.path.join(args.output_path, f"{args.group_id}.json")
+    with open(output_file, "w") as output_file:
+        json.dump(all_hits_data, output_file, indent=2)
 
     print(f"Total number of submissions in the group: {num_submissions_all_hits}")
 
