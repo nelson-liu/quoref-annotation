@@ -89,7 +89,7 @@ def main(args):
     print(f"\n{datetime.datetime.now()}\n------------------------", file=log_file)
     for qid in range(args.num_hits):
         new_hit = mturk.create_hit(
-            Title='Write questions about narratives and provide answers',
+            Title='Tracking Entities in Narratives',
             Description=description,
             Keywords='question answering',
             Reward='7.0',
