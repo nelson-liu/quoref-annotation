@@ -1,7 +1,5 @@
 // Minimum number of questions to write.
 var MIN_QUESTIONS = 10;
-// Minimum number of counting questions to write.
-var MIN_COUNT_QUESTIONS = 1;
 // The number of passages available to the user.
 var NUM_PASSAGES = 3;
 
@@ -12,8 +10,6 @@ var editing_question = null;
 var currentPassageIndex = 0;
 // Keeps track of the total number of questions written.
 var total_question_cnt = 0;
-// Keeps track of questions that involve counting.
-var counting_question_cnt = 0;
 // Keeps track of the number of questions written per passage
 var question_num = {};
 // An array of passages that the user is writing questions about.
@@ -28,7 +24,6 @@ var global_timeout = null;
 document.addEventListener("DOMContentLoaded", function() {
     // Initialize question and passage counters
     $('#numQuestionsWritten').text("0/" + MIN_QUESTIONS);
-    $('#countQuestionsWritten').text("0/" + MIN_COUNT_QUESTIONS);
     $('#passageNum').text("1/" + NUM_PASSAGES);
     // Fetch and load passages
     fetchPassagesWithRetries(3);
@@ -74,12 +69,6 @@ function deselect_span() {
     $("#error_panel").text("");
 }
 
-function question_has_count_words(question) {
-    return question.includes("least") || question.includes("most") || question.includes("once") ||
-             question.includes("twice") || question.includes("thrice") || question.includes("times");
-}
-
-
 function deleteQuestion(question_to_delete) {
     // Get the card of the question to edit
     var question_card_to_delete = question_to_delete.parentElement.parentElement;
@@ -88,8 +77,6 @@ function deleteQuestion(question_to_delete) {
 
     // Delete the question card and remove its annotation
     question_card_to_delete.remove();
-    // Keeping track of question text to handle counting questions count.
-    var question_text = annotations[question_card_to_delete_id].question;
     delete annotations[question_card_to_delete_id];
 
     // Decrement the id of questions answers with IDs higher than the one to delete.
@@ -105,10 +92,6 @@ function deleteQuestion(question_to_delete) {
     total_question_cnt -= 1;
     question_num[currentPassageIndex] -= 1;
     $("#numQuestionsWritten").text(total_question_cnt + "/" + MIN_QUESTIONS);
-    if (question_has_count_words(question_text)) {
-        counting_question_cnt -= 1;
-    }
-    $("#countQuestionsWritten").text(counting_question_cnt + "/" + MIN_COUNT_QUESTIONS);
 }
 
 // Edit an already added QA pair
@@ -148,12 +131,6 @@ function modify_previous_question(question_to_edit) {
     // Re-run prediction with backend model.
     document.getElementById('ai-answer').innerText = 'AI is thinking ...';
     getAIAnswer();
-    if (question_has_count_words(question_text)) {
-        // We need to decrement the count here since we will add to it in create_question
-        // after editing is done. But we do not change the display of the count here since
-        // it can be done after the editing is complete.
-        counting_question_cnt -= 1; 
-    }
 }
 
 // Gather the annotations into a structured format
@@ -232,14 +209,6 @@ function create_question() {
     else {
         var new_tab_id = editing_question;
     }
-
-    // We need to update the count questions counter whether we are editing existing questions,
-    // or adding new ones. If we are editing, and the original question already had count words,
-    // then we would have decremented the count in modify_previous_question. 
-    if (question_has_count_words(annotation.question)) {
-        counting_question_cnt += 1;
-    }
-    $("#countQuestionsWritten").text(counting_question_cnt + "/" + MIN_COUNT_QUESTIONS);
 
     // Modify the text of the question card
     $('#' + new_tab_id + '-text').text(qaText);
@@ -556,7 +525,7 @@ function addSpan() {
 }
 
 function check_question_count() {
-    if (total_question_cnt < MIN_QUESTIONS || counting_question_cnt < MIN_COUNT_QUESTIONS) {
+    if (total_question_cnt < MIN_QUESTIONS) {
         // Button is disabled
         $("#ready_submit").prop("disabled", true);
         // Remove btn-success if it exists.
