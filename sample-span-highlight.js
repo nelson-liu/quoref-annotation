@@ -43,13 +43,6 @@ function highlight_q7() {
     $(".span7b").addClass("highlighted");
 }
 
-function highlight_q9() {
-    $(".span9a").addClass("highlighted");
-    $(".span9b").addClass("highlighted");
-    $(".span9c").addClass("highlighted");
-    $(".span9d").addClass("highlighted");
-}
-
 function highlight_q10() {
     $(".span10").addClass("highlighted");
 }
