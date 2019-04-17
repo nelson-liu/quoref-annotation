@@ -23,7 +23,7 @@ def main(args):
                          endpoint_url = endpoint_url
                         )
 
-    passages = json.load(open(args.data_file))["passages"]
+    passages = json.load(open(args.data_file))
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
 
@@ -86,7 +86,10 @@ def main(args):
                         qa_data = value
                         passage_data = {}
                         global_passage_id = qa_data[0]['passageID']
-                        passage_data["passage"] = passages[global_passage_id]
+                        passage_metadata = passages[global_passage_id]
+                        passage_data["passage"] = passage_metadata["passage"]
+                        passage_data["title"] = passage_metadata["title"]
+                        passage_data["url"] = passage_metadata["url"]
                         passage_data["question_answer_pairs"] = qa_data
                         hit_data_with_lists['passages'].append(passage_data)
                 hit_data_with_lists['worker_id'] = worker_id

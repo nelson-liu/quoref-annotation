@@ -246,8 +246,8 @@ function isQuestionDuplicate() {
     var trimmedQuestion = $.trim($("#input-question").val());
 
     for (var questionId in annotations) {
-	// If we are editing a question, we need not compare the question with itself.
-	// If we are not editing a question, editing_question will be null anyway.
+        // If we are editing a question, we need not compare the question with itself.
+        // If we are not editing a question, editing_question will be null anyway.
         if (questionId == editing_question) {
             continue; 
         }
@@ -339,10 +339,11 @@ function populatePassage(passageIndex) {
     if (passageIndex < passages.length) {
         // Remove contents of passage box.
         $("#passage").empty();
+        var passage_text = passages[passageIndex]["passage"];
         // Change the text of the passage box.
         // We use innerText here (as opposed to jquery.text()) because we want
         // to preserve line breaks and the spaces that come with them.
-        document.getElementById("passage").innerText = passages[passageIndex];
+        document.getElementById("passage").innerText = passage_text;
         // Remove the written questions and replace them with the questions
         // written for the passage we're changing to.
         populateQuestionsWritten(passageIndex);
@@ -440,7 +441,7 @@ function error_response() {
 }
 
 function fetchPassagesWithRetries(n) {
-    var data_url = "https://s3-us-west-2.amazonaws.com/pradeepd-quoref/data/quoref_passages.json";
+    var data_url = "https://s3-us-west-2.amazonaws.com/pradeepd-quoref/data/quoref_data_with_ids.json";
 
     fetch(data_url)
         .then(parsePassages)
@@ -461,12 +462,13 @@ function parsePassages(response) {
     }
 
     response.json().then(function(data) {
-        var all_passages = data["passages"];
-        // Get 3 random passages to show the user.
+        var all_passage_ids = Object.keys(data);
+        // Get NUM_PASSAGES random passages to show the user.
         for (var i = 0; i < NUM_PASSAGES; i++) {
-            var idx = Math.floor((Math.random() * all_passages.length) + 1);
-            passages.push(all_passages[idx]);
-            passage_ids[i] = idx;
+            var idx = Math.floor((Math.random() * all_passage_ids.length) + 1);
+            var passage_id = all_passage_ids[idx];
+            passages.push(data[passage_id]);
+            passage_ids[i] = passage_id;
         }
         currentPassageIndex = 0;
         populatePassage(currentPassageIndex);

@@ -1,3 +1,7 @@
 boto3
 beautifulsoup4
+lxml
 ftfy
+tqdm
+spacy
+wikipedia
