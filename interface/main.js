@@ -1,7 +1,7 @@
 // Minimum number of questions to write.
 var MIN_QUESTIONS = 10;
 // The number of passages available to the user.
-var NUM_PASSAGES = 3;
+var NUM_PASSAGES = 4;
 
 // Keeps track of whether we're editing a question, and what that question is.
 var editing_question = null;
@@ -49,20 +49,21 @@ function getAIAnswer() {
         global_timeout = null;
         invoke_bidaf_with_retries(3);
     }, 800);
+    $("#error_panel").text("");
 }
 
 function deselect_span() {
-    // Deselect the radio button
-    $("#span_answer").prop('checked', false);
 
     // Hide the button for adding more answers
     $("#add_span").hide();
 
-    // Hide all of the currently visible answerCards
+    // Remove all of the currently visible answerCards
     var answersWritten = $('#answersWritten').find('.answerCard');
     for (var i = 0; i < answersWritten.length; i++) {
         answersWritten[i].remove();
     }
+    // And add a new one
+    initializeSpanAnswer();
 
     // Clear error panel text, since error might not
     // apply if we switch answer types
@@ -107,7 +108,6 @@ function modify_previous_question(question_to_edit) {
     var editing_question_annotation = annotations[editing_question];
     var question_text = editing_question_annotation.question;
 
-    $("#span_answer").prop('checked', true);
 
     for (var i = 0; i < editing_question_annotation.answer.spans.length; i++) {
         if (i == 0) {
@@ -122,9 +122,10 @@ function modify_previous_question(question_to_edit) {
         $("#answer-" + i + "-text").text(editing_question_annotation.answer.spans[i]);
         $("#answer-" + i + "-indices").text(editing_question_annotation.answer.indices[i]);
     }
-    // Add an extra blank span at the end, so users don't
-    // accidentally overwrite their last answer by highlighting.
-    addSpan();
+
+    // Disabling the "Add span" button here because there will already be an additional blank span
+    // for workers to start selecting.
+    $("#add_span").prop("disabled", true);
 
     // Fill in the input question box with the the already-written question.
     $("#input-question").val(question_text);
@@ -141,22 +142,20 @@ function getAnswerAnnotations() {
     // The answer provided by the AI.
     var aiAnswer = document.getElementById('ai-answer').innerText;
 
-    // User provided a span-based answer.
-    if (document.getElementById("span_answer").checked) {
 
-        // Get all user-provided answers
-        var answersWritten = $('#answersWritten').find('.answerCard');
-        for (var i = 0 ; i < answersWritten.length; i ++) {
-            var answerId = answersWritten[i].id;
-            // Extract the card text and indices
-            var answerText = $('#' + answerId + '-text').text();
-            if ($.trim(answerText) != "") {
-                var indices = $('#' + answerId + '-indices').text();
-                answerSpans.push(answerText);
-                answerIndices.push(indices);
-            }
+    // Get all user-provided answers
+    var answersWritten = $('#answersWritten').find('.answerCard');
+    for (var i = 0 ; i < answersWritten.length; i ++) {
+        var answerId = answersWritten[i].id;
+        // Extract the card text and indices
+        var answerText = $('#' + answerId + '-text').text();
+        if ($.trim(answerText) != "") {
+            var indices = $('#' + answerId + '-indices').text();
+            answerSpans.push(answerText);
+            answerIndices.push(indices);
         }
     }
+    //}
 
     return {
         "spans": answerSpans,
@@ -242,6 +241,19 @@ function isQuestionEmpty() {
     return false;
 }
 
+function isAnswerEmpty() {
+    var answersWritten = $('#answersWritten').find('.answerCard');
+    for (var i = 0 ; i < answersWritten.length; i ++) {
+        var answerId = answersWritten[i].id;
+        // Extract the card text and indices
+        var answerText = $('#' + answerId + '-text').text();
+        if ($.trim(answerText) != "") {
+            return false;
+        }
+    }
+    return true;
+}
+
 function isQuestionDuplicate() {
     var trimmedQuestion = $.trim($("#input-question").val());
 
@@ -286,15 +298,18 @@ function isAnswerSameAsAIAnswer() {
 }
 
 function validateAnswers() {
-    if (document.getElementById("span_answer").checked) {
-        run_validations_span();
-    }
+    run_validations_span();
 }
 
 // Run span checks whenever the predicted answer changes
 function run_validations_span() {
     if (isQuestionEmpty()) {
         $("#error_panel").text("This question is empty!");
+        $("#add_span").prop("disabled", true);
+        $("#next_question").prop("disabled", true);
+        return false;
+    }
+    if (isAnswerEmpty()) {
         $("#add_span").prop("disabled", true);
         $("#next_question").prop("disabled", true);
         return false;
@@ -354,7 +369,7 @@ function populatePassage(passageIndex) {
         // Enable or disable next / previous passage buttons as necessary.
         reset_passage_buttons();
         // Reset the answer entry interface
-        resetAnswerEntry();
+        resetAnswerEntry();	
     }
 }
 
@@ -500,7 +515,7 @@ function delete_span(answerToDelete) {
 }
 
 function initializeSpanAnswer() {
-    // Display the button for adding more answers
+    // Display the button for adding more answers.
     $("#add_span").show();
     // Add the first answer span
     addSpan();
@@ -523,6 +538,8 @@ function addSpan() {
     }
     // Reset the error panel
     $("#error_panel").text("");
+    // Diabling the add span button until a selection is made.
+    $("#add_span").prop("disabled", true);
     return false;
 }
 

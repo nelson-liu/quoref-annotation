@@ -28,10 +28,11 @@
                             </a>
                             <div id="collapseInstructions" class="collapse show">
                                 <div class="card-body">
-                                    <p class="card-text">
-                                        <b>This is a pilot annotation task. We are still trying to assess its feasibility. Once we get an understanding of how difficult this task is, we will update the pay rate accordingly.
-					    Your feedback will greatly help us in this process. So please remember to use the feedback box at the bottom of this page to let us know what you think!
-					    We will also make note of workers who make good submissions now, and add many more HITs with a generous pay rate for them later.
+                                    <p class="card-text" style="color:red">
+                                        <b>We updated this task based on the feedback we received from the pilot annotations. Most importantly, we do not require counting based questions any more.
+					   Also, we increased the number of passages you can choose from.
+					   We hope these changes will make the task significantly easier, and that the pay rate should now be appropriate. To help us get a better estimate, please tell us how much
+					   time you spent on this task in the feedback box at the bottom of this page. Please also let us know if you have any other suggestions to make this task easier. 
 					</b>
                                     </p>
                                     <p class="card-text">
@@ -289,7 +290,7 @@
 				appropriate. To remove previously added spans, you can click on the "Delete Span" buttons next to the answer boxes.
                             </li>
                             <li> Once you add a question, it appears below the answer area. If you are unhappy with a question you added, you can edit it or delete it. </li>
-                            <li> You have <b>3 passages</b> to pick from, and over these three passages, you must write <b>at least 10 questions</b> to submit the HIT.
+                            <li> You have <b>4 passages</b> to pick from, and over these three passages, you must write <b>at least 10 questions</b> to submit the HIT.
                                 You will see a counter that shows the total number of questions submitted so far. </li>
                             <li> You can go back and forth between the passages. Some passages are easier to generate questions from than
                                 others, so if you have a hard time, move to a different passage.
@@ -337,9 +338,7 @@
                                             <div class="row mt-4">
                                                 <div class="col">
                                                     <h4>Your Answer</h4>
-                                                    <div class="radio">
-                                                        <label><input type="radio" name="answer" id="span_answer" name="span_answer" value='span' onchange="return initializeSpanAnswer();"> Start highlighting the answer</label>
-                                                    </div>
+						    Highlight a span in the paragraph and it will appear in the box below.<br/>
                                                     <div id="answersWritten">
                                                     </div>
                                                     <button type="button" id="add_span" class="btn btn-primary mt-2" onclick="return addSpan();" disabled style="display:none">
@@ -352,10 +351,13 @@
                                                     </button>
                                                 </div>
                                                 <div class="col">
-                                                    <h4>AI predicted:<br />(wait for answer to appear below)</h4>
+                                                    <h4>AI Prediction</h4>
+						    AI prediction will appear below as soon as you are done typing a question.<br />
                                                     <div class="card bg-light">
                                                         <div class="card-body">
-                                                            <samp id="ai-answer"></samp>
+							    <p>
+                                                             <samp id="ai-answer"></samp>
+							    </p>
                                                         </div>
                                                     </div>
                                                 </div>
