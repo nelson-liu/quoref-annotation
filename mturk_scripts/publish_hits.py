@@ -85,15 +85,33 @@ def main(args):
         }
         qualification_requirements.append(prod_masters_qualification if args.publish_for_real else
                                           sandbox_masters_qualification)
+
+    if args.include_quals:
+        for qualification_string in args.include_quals:
+            qualification = {
+                'QualificationTypeId': qualification_string,
+                'Comparator': 'Exists',
+            }
+            qualification_requirements.append(qualification)
+
+    if args.exclude_quals:
+        for qualification_string in args.exclude_quals:
+            qualification = {
+                'QualificationTypeId': qualification_string,
+                'Comparator': 'DoesNotExist',
+            }
+            qualification_requirements.append(qualification)
+
     print("Qualification requirements:", qualification_requirements)
     print(f"\n{datetime.datetime.now()}\n------------------------", file=log_file)
+    print("Qualification requirements:", qualification_requirements, file=log_file)
     for qid in range(args.num_hits):
         new_hit = mturk.create_hit(
             Title='Tracking Entities in Narratives',
             Description=description,
             Keywords='question answering',
             Reward='7.0',
-            MaxAssignments=20,
+            MaxAssignments=args.max_assignments,
             LifetimeInSeconds=432000, # 5 days
             AssignmentDurationInSeconds=86400, # 1 day
             AutoApprovalDelayInSeconds=432000, # 5 days
@@ -119,7 +137,13 @@ if __name__ == "__main__":
                            help='Publish to production?')
     argparser.add_argument('--num-hits', dest='num_hits', type=int, default=1,
                            help='Number of HITs to publish (default 1)')
+    argparser.add_argument('--max-assignments', dest='max_assignments', type=int, default=20,
+                           help='Maximum number of workers per HIT (default 20)')
     argparser.add_argument('--require-masters', action='store_true', dest='require_masters',
                            help='Require masters qualification?')
+    argparser.add_argument('--include-quals', type=str, dest='include_quals', nargs="+",
+                           help='Any other qualifications to include')
+    argparser.add_argument('--exclude-quals', type=str, dest='exclude_quals', nargs="+",
+                           help='Any qualifications to exclude')
     args = argparser.parse_args()
     main(args)

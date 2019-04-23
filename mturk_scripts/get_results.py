@@ -24,8 +24,17 @@ def main(args):
                         )
 
     passages = json.load(open(args.data_file))
+    existing_files = set()
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
+    else:
+        for filename in os.listdir(args.output_path):
+            if filename.endswith("json"):
+                existing_files.add(filename)
+
+    output_path = f"{args.output_path}/to_review"
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
 
     num_submissions_all_hits = 0
     if args.hit_ids:
@@ -49,6 +58,7 @@ def main(args):
 
 
     all_hits_data = []
+    all_worker_ids = set()
     for hit_id in wanted_hit_ids:
         worker_results = mturk.list_assignments_for_hit(HITId=hit_id, AssignmentStatuses=['Submitted', 'Approved'],
                                                         MaxResults=100)
@@ -61,6 +71,7 @@ def main(args):
                 hit_data = defaultdict(list)
                 xml_doc = xmltodict.parse(assignment['Answer'])
                 worker_id = assignment['WorkerId']
+                all_worker_ids.add(worker_id)
                 if type(xml_doc['QuestionFormAnswers']['Answer']) is list:
                     # Multiple fields in HIT layout
                     for answer_field in xml_doc['QuestionFormAnswers']['Answer']:
@@ -95,10 +106,23 @@ def main(args):
                 hit_data_with_lists['worker_id'] = worker_id
                 all_hits_data.append(hit_data_with_lists)
 
-    output_filename = f"{args.group_id}.json" if args.group_id is not None else "hit_group.json"
-    output_file = os.path.join(args.output_path, output_filename)
-    with open(output_file, "w") as output_file:
-        json.dump(all_hits_data, output_file, indent=2)
+    if args.group_by_worker:
+        for worker_id in all_worker_ids:
+            worker_grouped_hits = []
+            for hit_data in all_hits_data:
+                if hit_data['worker_id'] == worker_id:
+                    worker_grouped_hits.append(hit_data)
+            output_filename = f"{worker_id}.json"
+            if output_filename not in existing_files:
+                output_file = os.path.join(output_path, output_filename)
+                with open(output_file, "w") as output_file:
+                    json.dump(worker_grouped_hits, output_file, indent=2)
+
+    else:
+        output_filename = f"{args.group_id}.json" if args.group_id is not None else f"{args.hit_ids[0]}.json"
+        output_file = os.path.join(args.output_path, output_filename)
+        with open(output_file, "w") as output_file:
+            json.dump(all_hits_data, output_file, indent=2)
 
     print(f"Total number of submissions in the group: {num_submissions_all_hits}")
 
@@ -115,5 +139,7 @@ if __name__ == "__main__":
     argparser.add_argument('--access-key-file', dest='access_key_file', type=str, required=True)
     argparser.add_argument('--get-sandbox-results', action='store_true', dest='use_sandbox',
                            help='Get results from sandbox?')
+    argparser.add_argument('--group-by-worker', action='store_true', dest='group_by_worker',
+                           help='Group output by workers?')
     args = argparser.parse_args()
     main(args)
