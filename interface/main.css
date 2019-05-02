@@ -145,6 +145,15 @@
     background-color: lightgreen
 }
 
+.span13a.highlighted {
+    background-color: lightblue
+}
+
+.span13b.highlighted {
+    background-color: lightgreen
+}
+
+
 .annotated {
     float: left
 }

@@ -56,3 +56,8 @@ function highlight_q12() {
     $(".span12a").addClass("highlighted");
     $(".span12b").addClass("highlighted");
 }
+
+function highlight_q13() {
+    $(".span13a").addClass("highlighted");
+    $(".span13b").addClass("highlighted");
+}

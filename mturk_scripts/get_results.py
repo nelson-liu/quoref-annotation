@@ -39,6 +39,8 @@ def main(args):
     num_submissions_all_hits = 0
     if args.hit_ids:
         wanted_hit_ids = args.hit_ids
+    elif args.hit_ids_file:
+        wanted_hit_ids = [x.strip() for x in open(args.hit_ids_file)]
     elif args.group_id:
         wanted_hit_ids = []
         all_hits = mturk.list_hits(MaxResults=100)['HITs']
@@ -54,22 +56,27 @@ def main(args):
             hit_id = hit['HITId']
             wanted_hit_ids.append(hit_id)
     else:
-        raise RuntimeError("Require either HITid or HITGroupId to get results!")
+        raise RuntimeError("Require either HITIds or HITGroupId to get results!")
 
 
     all_hits_data = []
     all_worker_ids = set()
     for hit_id in wanted_hit_ids:
+        hit = mturk.get_hit(HITId=hit_id)['HIT']
         worker_results = mturk.list_assignments_for_hit(HITId=hit_id, AssignmentStatuses=['Submitted', 'Approved'],
                                                         MaxResults=100)
         num_submissions = worker_results['NumResults']
-        print(f"Number of Submissions for {hit_id} so far: {num_submissions}\n")
+        num_pending = hit['NumberOfAssignmentsPending']
+        num_available = hit['NumberOfAssignmentsAvailable']
+        print(f"""Number of submissions for {hit_id} so far: {num_submissions}\n"""
+              f"""\t{num_pending} are pending, {num_available} are available\n""")
         num_submissions_all_hits += num_submissions
 
         if num_submissions > 0:
             for assignment in worker_results['Assignments']:
                 hit_data = defaultdict(list)
                 xml_doc = xmltodict.parse(assignment['Answer'])
+                submit_time = str(assignment['SubmitTime'])
                 worker_id = assignment['WorkerId']
                 all_worker_ids.add(worker_id)
                 if type(xml_doc['QuestionFormAnswers']['Answer']) is list:
@@ -104,6 +111,7 @@ def main(args):
                         passage_data["question_answer_pairs"] = qa_data
                         hit_data_with_lists['passages'].append(passage_data)
                 hit_data_with_lists['worker_id'] = worker_id
+                hit_data_with_lists['submission_time'] = submit_time
                 all_hits_data.append(hit_data_with_lists)
 
     if args.group_by_worker:
@@ -119,7 +127,7 @@ def main(args):
                     json.dump(worker_grouped_hits, output_file, indent=2)
 
     else:
-        output_filename = f"{args.group_id}.json" if args.group_id is not None else f"{args.hit_ids[0]}.json"
+        output_filename = f"{args.group_id}.json" if args.group_id is not None else "all_results.json"
         output_file = os.path.join(args.output_path, output_filename)
         with open(output_file, "w") as output_file:
             json.dump(all_hits_data, output_file, indent=2)
@@ -132,7 +140,9 @@ if __name__ == "__main__":
     argparser.add_argument('--group-id', type=str, dest="group_id", help="""Group ID of HITs to look at. Either
                            provide this or HITids to get results.""")
     argparser.add_argument('--hit-ids', type=str, dest="hit_ids", nargs="+", help="""HITIds of HITs to look at. Either
-                           provide these or a HITGroupid to get results.""")
+                           provide these, a HITIds file, or a HITGroupid to get results.""")
+    argparser.add_argument('--hit-ids-file', type=str, dest="hit_ids_file", help="""File with HITIds of HITs to look at. Either
+                           provide this or a HITGroupid to get results.""")
     argparser.add_argument('--data-file', type=str, dest="data_file", help="Path to file containing paragraphs", required=True)
     argparser.add_argument('--output-directory', type=str, dest="output_path",
                            help="Path where outputs are written", required=True)

@@ -35,11 +35,11 @@
 					   time you spent on this task in the feedback box at the bottom of this page. Please also let us know if you have any other suggestions to make this task easier. 
 					</b>
 				    </p>-->
-				    <p class="card-text">
+				    <!--<p class="card-text">
 					<b>
 					This is a pilot annotation task. We are still trying to assess its feasibility. Once we get an understanding of how difficult this task is, we will update the pay rate accordingly. Your feedback will greatly help us in this process. So please remember to use the feedback box at the bottom of this page to let us know what you think! Please also let us know how much time you spent on this task in the feedback box so that we can get a good estimate of the difficulty. We will make note of workers who make good submissions now, and add many more HITs with a generous pay rate for them later.
 					</b>
-				    </p>
+				    </p>-->
                                     <p class="card-text">
                                         In this task, you will look at paragraphs that contain several phrases that are references to names of
                                         people, places, or things. For example, in the first sentence from sample paragraph below,
@@ -195,6 +195,9 @@
                                         highlight the parts of the passage that
                                         are relevant to the question.
                                     </h5>
+                                    <h5 class="card-text text-center" style="color:red">
+                                        The first two classes of examples below are the most common mistakes workers made previously. Please pay more attention to them. 
+                                    </h5>
                                     <div class="container">
                                         <div class="row">
                                             <div class="col">
@@ -207,14 +210,17 @@
 								In The Tangled Skein, Queen Mary is characterized as a loving woman with a strong sense of justice. The tangled skein arises from Mary's
 								love for the fictional character <span class="sample-span span11b">Robert d'Esclade</span>, <span class="sample-span span11b">fifth Duke of Wessex</span>, said
 								in this book to be the people's choice as King Consort.
-								<span class="sample-span span11b">Wessex</span> is chivalrous and charming, but semi-betrothed to Lady Ursula Glynde, whom <span class="sample-span span11a">he</span> has not seen since her infancy.
+								<span class="sample-span span11b">Wessex</span> is chivalrous and charming, but semi-betrothed to <span class="sample-span span13b">Lady Ursula Glynde</span>,
+								whom <span class="sample-span span11a">he</span> has not seen since her infancy.
 								<span class="sample-span span11b">Wessex</span> is repelled
-								by the idea of having his wife thrust upon him and purposely avoids Lady Ursula. Unknown to <span class="sample-span span11b">Wessex</span>, the
+								by the idea of having his wife thrust upon him and purposely avoids <span class="sample-span span13b">Lady Ursula</span>.
+								Unknown to <span class="sample-span span11b">Wessex</span>, the
 								Queen jealously guards him
-								against Ursula, who is extremely beautiful. As soon as she realizes the Queen is keeping her away from <span
-									class="sample-span span11b">Wessex</span>, Ursula is angered. She
-								believes she loves <span class="sample-span span11b">Wessex</span>, for his nobility and goodness, and she is invested heavily in the betrothal. <span class="sample-span span10">On her father's deathbed, Ursula
-									promised to go into a convent if she did not marry <span class="sample-span span11b">Wessex</span></span>. Although Ursula does not want to lose her independence by marrying, she seeks
+								against <span class="sample-span span13b">Ursula</span>, who is extremely beautiful. As soon as she realizes the Queen is keeping her away from <span
+		      class="sample-span span11b">Wessex</span>, <span class="sample-span span13b">Ursula</span> is angered. She
+								believes she loves <span class="sample-span span11b">Wessex</span>, for his nobility and goodness, and she is invested heavily in the betrothal. <span class="sample-span span10">On
+									<span class="sample-span span13a">her</span> father's deathbed, <span class="sample-span span13b">Ursula</span>
+									promised to go into a convent if she did not marry <span class="sample-span span11b">Wessex</span></span>. Although <span class="sample-span span13b">Ursula</span> does not want to lose her independence by marrying, she seeks
 								to frustrate the Queen's plans and make <span class="sample-span span11b">Wessex</span> notice her; however, the arrival of Cardinal de Moreno, and
 								<span class="sample-span span12a">his henchman</span> <span class="sample-span span12b">Don Mignel</span>,
 								<span class="sample-span span12b">Marquis de Saurez</span>, shifts the scene.
@@ -240,7 +246,7 @@
                                                 </div>
 						<hr>
                                                 <h5>
-                                                    Avoid questions that have multiple answers
+                                                    Avoid questions that have multiple answers. Please make the questions explicit.
                                                 </h5>
                                                 <div class="card mb-2" onmouseover="highlight_q11();" onmouseout="reset_higlight();">
                                                     <div class="card-body">
@@ -250,6 +256,23 @@
 							    Why it is bad: The question links "he" (in blue) to the name of that person, but the person is referred to by multiple names (in green), which are all correct answers.<br/>
                                                             Notes: You can instead ask <i>What is the full name of the person who has not seen Ursula since here infancy?</i>, and the answer would be
 							    <b>Robert d'Esclade</b>.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="card mb-2" onmouseover="highlight_q13();" onmouseout="reset_higlight();">
+                                                    <div class="card-body">
+                                                        <p class="card-text">
+                                                            Bad Question: Whose father was on a deathbed? <br/>
+							    Answers: <b>Ursula</b>, <b>Lady Ursula</b>, <b>Lady Ursula Glynde</b><br/>
+							    Why it is bad: The question links "her" (in blue) to the name of that person, but the person is referred to by her first name, full name and with a title (all in green),
+							    which are all correct answers.<br/>
+                                                            Notes: You can instead ask one of the foolowing questions:
+							    <ul>
+							    	<li><i>What is the full name of the person whose father was on a deathbed?</i> Answer: <b>Lady Ursula Glynde</b></li>
+								<li><i>What is the first name of the person whose father was on a deathbed?</i> Answer: <b>Ursula</b></li>
+							    	<li><i>What is the last name of the person whose father was on a deathbed?</i> Answer: <b>Glynde</b></li>
+							    </ul>
+							    Whenever applicable, you can also ask for other aliases of people, like their nicknames.
                                                         </p>
                                                     </div>
                                                 </div>
@@ -289,6 +312,7 @@
                             <li> There is an AI system running in the background that will try to answer your question as
                                 soon as you are done typing. If the system's answer is correct, please change your question, as it may be too easy. After you
                                 find a good question, please also select the correct answer from the paragraph by highlighting the relevant spans with your mouse.
+				<b>Please only select the answers to your questions. The highlights shown in the examples above are only to draw your attention to the relevant spans in the paragraphs.</b>
                             </li>
                             <li>
                                 If your answer has multiple spans, you can submit them by clicking on the "Add Another Span" button under the last answer box, and selecting additional spans as
@@ -343,7 +367,7 @@
                                             <div class="row mt-4">
                                                 <div class="col">
                                                     <h4>Your Answer</h4>
-						    Highlight a span in the paragraph and it will appear in the box below.<br/>
+						    Select a span in the paragraph and it will appear in the box below.<br/>
                                                     <div id="answersWritten">
                                                     </div>
                                                     <button type="button" id="add_span" class="btn btn-primary mt-2" onclick="return addSpan();" disabled style="display:none">
