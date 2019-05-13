@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="/tmp/all_results_string.json"></script>
+    <script>
+	function fetch_data() {
+    	    var data_url = "https://s3-us-west-2.amazonaws.com/pradeepd-quoref/data/all_results_open_domain.json";
+
+    	    fetch(data_url)
+        	.then(sample_question)
+        	.catch(function(error) {
+			show_error();
+        	});
+	}
+
+	function show_error() {
+
+	}
+
+        function sample_question(response) {
+	    if (response.status !== 200) {
+		console.log('Looks like there was a problem. Status Code: ' +
+			    response.status);
+		show_error();
+		return;
+	    }
+	    response.json().then(function(data) {
+		    var num_submissions = data.length;
+		    var random_submission_id = Math.floor(Math.random() * num_submissions);
+		    var annotation = data[random_submission_id];
+		    var passages = annotation["passages"];
+		    var passage_id = Math.floor(Math.random() * passages.length);
+		    var passage_annotation = passages[passage_id];
+		    var random_question_id = Math.floor(Math.random() * passage_annotation["question_answer_pairs"].length);
+		    var qa_pair = passage_annotation["question_answer_pairs"][random_question_id]
+		    document.getElementById("p_head").innerText = "Article: " + passage_annotation["title"];
+		    document.getElementById("w_head").innerText = annotation["worker_id"];
+		    document.getElementById("ai_answer").innerText = qa_pair["answer"]["ai_answer"]
+
+		    document.getElementById("passage").innerText = passage_annotation["passage"];
+		    document.getElementById("question").innerText = qa_pair["question"];
+		    var answer = get_answer_text(qa_pair["answer"]);
+		    document.getElementById("answer").innerText = answer;
+	    });
+        }
+
+        function get_answer_text(answer) {
+            var answer_text = ""
+            for (var i = 0; i < answer["spans"].length; i++) {
+                answer_text += "[" + answer["spans"][i]  + "] "
+            }
+            return answer_text;
+        }
+    </script>
+</head>
+<body onload="fetch_data()" style="margin-left:20px">
+    <h3 id="p_head">Passage:</h3>
+    <div id="passage"></div>
+    <br />
+    <h3 id="q_head">Question:</h3>
+    <div id="question"></div>
+    <br />
+    <h3>Answer:</h3>
+    <div id="answer"></div>
+    <h3>AI answer:</h3>
+    <div id="ai_answer"></div>
+    <br />
+    <h3>Worker Id:</h3>
+    <div id="w_head"></div>
+    <br />
+    <button onclick="fetch_data()">Next sample</button>
+    <br />
+</body>
+</html>
