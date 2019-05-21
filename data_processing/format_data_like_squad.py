@@ -57,6 +57,7 @@ def main(args):
         reformatted_datum = {"title": grouped_passages[0]["passage_title"],
                              "url": grouped_passages[0]["passage_url"],
                              "paragraphs": [{"context": grouped_passages[0]["context"],
+                                             "context_id": grouped_passages[0]["passage_id"],
                                              "qas": []}]}
         for passage_info in grouped_passages:
             for qa_info in passage_info["qas"]:
@@ -64,22 +65,56 @@ def main(args):
         reformatted_data.append(reformatted_datum)
 
     if args.split:
-        num_passages = len(reformatted_data)
-        train_size = int(0.8 * num_passages)
         random.shuffle(reformatted_data)
-        train_data = reformatted_data[:train_size]
-        dev_data = reformatted_data[train_size:]
+        num_passages = len(reformatted_data)
+        data_being_added = "test"
+        test_limit = int(0.15 * num_passages)
+        test_and_dev_limit = int(0.3 * num_passages)
+        split_data = {"train": [],
+                      "dev": [],
+                      "test": []}
+        test_set_offset = 0
+        passage_ids_to_exclude = set()
+        if args.test_ids_to_include:
+            test_ids = set([x.strip() for x in open(args.test_ids_to_include).readlines()])
+            for passage_data in reformatted_data:
+                passage_qa_ids = set([qa["id"] for qa in passage_data["paragraphs"][0]["qas"]])
+                if test_ids.intersection(passage_qa_ids):
+                    passage_ids_to_exclude.add(passage_data["paragraphs"][0]["context_id"])
+                    split_data["test"].append(passage_data)
+                    test_set_offset += 1
+                    if test_set_offset > test_limit:
+                        raise RuntimeError(f"{test_set_offset} paragraphs already added to test!")
+            print(f"Added {test_set_offset} passages to test")
+
+        for passage_num, passage_data in enumerate(reformatted_data):
+            passage_id = passage_data["paragraphs"][0]["context_id"]
+            if passage_id in passage_ids_to_exclude:
+                continue
+            if passage_num + test_set_offset > test_limit:
+                data_being_added = "dev"
+            if passage_num + test_set_offset > test_and_dev_limit:
+                data_being_added = "train"
+            split_data[data_being_added].append(passage_data)
+        train_data = split_data["train"]
+        dev_data = split_data["dev"]
+        test_data = split_data["test"]
         train_file_name = args.output_file.replace(".json", "") + "_train.json"
         dev_file_name = args.output_file.replace(".json", "") + "_dev.json"
+        test_file_name = args.output_file.replace(".json", "") + "_test.json"
         with open(train_file_name, "w") as output_file:
             json.dump({"data": train_data}, output_file, indent=2)
         with open(dev_file_name, "w") as output_file:
             json.dump({"data": dev_data}, output_file, indent=2)
+        with open(test_file_name, "w") as output_file:
+            json.dump({"data": test_data}, output_file, indent=2)
 
         num_train_questions = sum([len(d["paragraphs"][0]["qas"]) for d in train_data])
         num_dev_questions = sum([len(d["paragraphs"][0]["qas"]) for d in dev_data])
+        num_test_questions = sum([len(d["paragraphs"][0]["qas"]) for d in test_data])
         print(f"Wrote {len(train_data)} passages in train with {num_train_questions} questions")
         print(f"Wrote {len(dev_data)} passages in dev with {num_dev_questions} questions")
+        print(f"Wrote {len(test_data)} passages in test with {num_test_questions} questions")
     else:
         json.dump({"data": reformatted_data}, open(args.output_file, "w"), indent=2)
         num_questions = sum([len(d["paragraphs"][0]["qas"]) for d in reformatted_data])
@@ -91,6 +126,8 @@ if __name__ == "__main__":
                         required=True)
     parser.add_argument("--output-file", dest="output_file", type=str, required=True)
     parser.add_argument("--sample", action="store_true", help="Only output a small sample")
-    parser.add_argument("--split", action="store_true", help="Split into train and dev (80 -20 split)")
+    parser.add_argument("--split", action="store_true", help="Split into train, dev and test (70 - 15 - 15 split)")
+    parser.add_argument("--include-ids-in-test", dest="test_ids_to_include", type=str,
+                        help="File with question IDs to include in test")
     args = parser.parse_args()
     main(args)
